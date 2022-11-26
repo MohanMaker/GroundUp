@@ -1,10 +1,26 @@
 import os
 import requests
 import urllib.parse
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="geoapiExercises")
 
 from flask import redirect, render_template, request, session
 from functools import wraps
 
+def reversegeocode(lat, lng):
+    lat, lng = str(lat), str(lng)
+    location = geolocator.reverse(lat+","+lng)
+ 
+    address = location.raw['address']
+    
+    # traverse the data
+    output = {}
+    output['city'] = address.get('city', '')
+    output['state'] = address.get('state', '')
+    output['country'] = address.get('country', '')
+    output['zipcode'] = address.get('postcode')
+
+    return output;
 
 def apology(message, code=400):
     """Render message as an apology to user."""
@@ -40,7 +56,7 @@ def lookup(symbol):
 
     # Contact API
     try:
-        api_key = os.environ.get("API_KEY")
+        api_key = os.environ.get("pk_169bb8952a2c4eb98b67e4ca0fdc5d76")
         url = f"https://cloud.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={api_key}"
         response = requests.get(url)
         response.raise_for_status()

@@ -1,3 +1,5 @@
+# username = groundup
+# password = groundup
 # Implement map
 # Implement location filtering
 # Implement other filtering
@@ -29,11 +31,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
-
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+db = SQL("sqlite:///groundup.db")
 
 
 @app.after_request
@@ -63,62 +61,6 @@ def index():
             sharesvalue += row["totalsymbolvalue"]
         total += sharesvalue
     return render_template("index.html", portfolio=portfolio, cash=cash, total=total)
-
-
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    if request.method == "POST":
-        # Get symbol and shares from user
-        symbol = request.form.get("symbol")
-        shares = request.form.get("shares")
-
-        # Validate symbol
-        if not symbol:
-            return apology("Missing symbol", 400)
-        stock = lookup(symbol)
-        if stock == None:
-            return apology("Invalid symbol", 400)
-
-        # Validate shares
-        if not shares.isnumeric() or int(shares) <= 0 or int(shares) % 1 != 0:
-            return apology("Shares must be a positive integer", 400)
-        shares = int(shares)
-
-        # Check for sufficient funds
-        userbalance = db.execute("SELECT cash FROM users WHERE id = ?;", session["user_id"])
-        cash = userbalance[0]["cash"] - stock["price"] * shares
-        if cash < 0:
-            return apology("Can't afford at current price", 400)
-
-        # Update databases
-        # Update cash
-        db.execute("UPDATE users SET cash = ? WHERE id = ?", cash, session["user_id"])
-        # Update portfolio
-        pastpurchase = db.execute("SELECT * FROM portfolio WHERE id = ? AND symbol = ?;", session["user_id"], stock["symbol"])
-        if len(pastpurchase) != 0:
-            shares = shares + pastpurchase[0]["shares"]
-            db.execute("UPDATE portfolio SET shares = ? WHERE id = ? AND symbol = ?;", shares, session["user_id"], stock["symbol"])
-        else:
-            db.execute("INSERT INTO portfolio (id, symbol, name, shares) VALUES (?, ?, ?, ?);",
-                       session["user_id"], stock["symbol"], stock["name"], shares)
-        # Update history
-        db.execute("INSERT INTO history (id, symbol, shares, price) VALUES (?, ?, ?, ?);",
-                   session["user_id"], symbol, shares, stock["price"])
-
-        flash("Bought!")
-        return redirect("/")
-    else:
-        return render_template("buy.html")
-
-
-@app.route("/history")
-@login_required
-def history():
-    history = db.execute("SELECT * FROM history WHERE id = ?", session["user_id"])
-    if len(history) == 0:
-        history = None
-    return render_template("history.html", history=history)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -203,10 +145,6 @@ def register():
         if password == '' or confirmation == '' or password != confirmation:
             return apology("Enter a valid password", 400)
 
-        # Password checking add-on
-        if not any(char.isdigit() for char in password) or not any(char.isalpha() for char in password):
-            return apology("Enter a password with at least one letter and number", 400)
-
         db.execute("INSERT INTO users (username, hash) VALUES(?, ?);", username, generate_password_hash(password))
 
         flash("Registered!")
@@ -215,55 +153,3 @@ def register():
 
     else:
         return render_template("register.html")
-
-
-@app.route("/sell", methods=["GET", "POST"])
-@login_required
-def sell():
-    symbolsowned = db.execute("SELECT symbol FROM portfolio WHERE id = ?", session["user_id"])
-    if request.method == "POST":
-        # Get symbol and shares from user
-        symbol = request.form.get("symbol")
-        shares = request.form.get("shares")
-
-        # Validate symbol
-        if not symbol:
-            return apology("Missing symbol", 400)
-
-        have = False
-        for row in symbolsowned:
-            if symbol == row["symbol"]:
-                have = True
-        if have == False:
-            return apology("Symbol not owned", 400)
-
-        # Validate shares
-        if not shares.isnumeric() or int(shares) <= 0 or int(shares) % 1 != 0:
-            return apology("Shares must be a positive integer", 400)
-        shares = int(shares)
-
-        # Verify that the user owns enough shares to sell
-        sharesowned = db.execute("SELECT shares FROM portfolio WHERE id = ? AND symbol = ?",
-                                 session["user_id"], symbol)[0]["shares"]
-        sharesowned -= shares
-        if sharesowned < 0:
-            return apology("Too many shares", 400)
-
-        # Update databases
-        stock = lookup(symbol)
-        # Update history
-        db.execute("INSERT INTO history (id, symbol, shares, price) VALUES (?, ?, ?, ?)",
-                   session["user_id"], symbol, (-1 * shares), stock["price"])
-        # Update portfolio
-        if sharesowned == 0:
-            db.execute("DELETE FROM portfolio WHERE id = ? AND symbol = ?;", session["user_id"], symbol)
-        else:
-            db.execute("UPDATE portfolio SET shares = ? WHERE id = ? AND symbol = ?;", sharesowned, session["user_id"], symbol)
-        # Update users cash
-        cost = stock["price"] * shares
-        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", cost, session["user_id"])
-
-        flash("Sold!")
-        return redirect("/")
-    else:
-        return render_template("sell.html", symbolsowned=symbolsowned)
