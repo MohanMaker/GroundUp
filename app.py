@@ -1,5 +1,11 @@
-# export API_KEY=pk_169bb8952a2c4eb98b67e4ca0fdc5d76
-# personal touch: require users’ passwords to have some number of letters, numbers, and/or symbols
+# Implement map
+# Implement location filtering
+# Implement other filtering
+
+# Search page
+# Dropdowns
+# Map page 
+# Show unfiltered map
 
 import os
 
