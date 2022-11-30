@@ -1,13 +1,17 @@
+// Creates map, sets coordinates to India 
 let myMap = L.map("map").setView([28.6139, 77.2090], 10);
 
+// Creates tile, pulls from openstreetmap 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     // Attribution is obligatory as per copyright!
     maxZoom: 20
 }).addTo(myMap);
 
+// Creates Marker 
 let sfo_marker = L.marker([28.6139, 77.2090]).addTo(myMap);
 
+// Sets info box for marker
 sfo_marker.bindPopup("<b>Collector 1</b>");
 
 /*
