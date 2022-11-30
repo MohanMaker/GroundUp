@@ -153,3 +153,8 @@ def register():
 
     else:
         return render_template("register.html")
+
+@app.route("/map")
+@login_required
+def map_endpoint():
+    return render_template("map.html")
