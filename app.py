@@ -56,7 +56,6 @@ def index():
         lngmax = lng + radius
 
         tograph = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
-        print(tograph, file=sys.stderr)
 
         return render_template("map.html", tograph=tograph)
     else:
