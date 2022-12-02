@@ -4,11 +4,6 @@
 # Implement location filtering
 # Implement other filtering
 
-# Search page
-# Dropdowns
-# Map page 
-# Show unfiltered map
-
 import os
 
 from cs50 import SQL
@@ -16,14 +11,13 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+import geopy
+import sys
 
-from helpers import apology, login_required, lookup, usd
+from helpers import reversegeocode, geocode, apology, login_required, lookup
 
 # Configure application
 app = Flask(__name__)
-
-# Custom filter
-app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -43,25 +37,33 @@ def after_request(response):
     return response
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", session["user_id"])
-    cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+    if request.method == "POST":
+        # Get inputs from user
+        distance = request.form.get("distance")
+        address = request.form.get("address")
+        occupation = request.form.get("occupation")
+        education = request.form.get("education")
+        sector = request.form.get("sector")
 
-    total = cash
-    if len(portfolio) == 0:
-        portfolio = None
+        lat, lng = geocode(address)
+        radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
+        latmin = lat - radius
+        latmax = lat + radius
+        lngmin = lng - radius
+        lngmax = lng + radius
+
+        tograph = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
+        print(tograph, file=sys.stderr)
+
+        return render_template("map.html", tograph=tograph)
     else:
-        sharesvalue = 0
-        for row in portfolio:
-            stock = lookup(row["symbol"])
-            row["persymbolprice"] = stock["price"]
-            row["totalsymbolvalue"] = (row["persymbolprice"] * row["shares"])
-            sharesvalue += row["totalsymbolvalue"]
-        total += sharesvalue
-    return render_template("index.html", portfolio=portfolio, cash=cash, total=total)
-
+        occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
+        education = db.execute("SELECT DISTINCT education FROM datacollectors;")
+        sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
+        return render_template("index.html", occupation=occupation, education=education, sector=sector)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -124,7 +126,7 @@ def quote():
         if info == None:
             return apology("Invalid symbol", 400)
 
-        return render_template("quoted.html", name=info["name"], symbol=info["symbol"], price=usd(info["price"]))
+        return render_template("quoted.html", name=info["name"], symbol=info["symbol"], price=info["price"])
     else:
         return render_template("quote.html")
 

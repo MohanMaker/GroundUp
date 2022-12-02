@@ -20,7 +20,15 @@ def reversegeocode(lat, lng):
     output['country'] = address.get('country', '')
     output['zipcode'] = address.get('postcode')
 
-    return output;
+    return output
+
+def geocode(address):
+    location = geolocator.geocode(address)
+ 
+    lat = location.latitude
+    lng = location.longitude
+
+    return lat, lng
 
 def apology(message, code=400):
     """Render message as an apology to user."""
@@ -73,8 +81,3 @@ def lookup(symbol):
         }
     except (KeyError, TypeError, ValueError):
         return None
-
-
-def usd(value):
-    """Format value as USD."""
-    return f"${value:,.2f}"

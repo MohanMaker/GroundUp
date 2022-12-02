@@ -1,4 +1,15 @@
 /* Size for brand */
+
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.form-inline label {
+margin: 5px 10px 5px 0;
+}
+  
 nav .navbar-brand
 {
     font-size: xx-large;

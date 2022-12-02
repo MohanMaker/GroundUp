@@ -5,40 +5,57 @@
 {% endblock %}
 
 {% block main %}
-    <main class="container py-5 text-center">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-start">Symbol</th>
-                    <th class="text-start">Name</th>
-                    <th class="text-end">Shares</th>
-                    <th class="text-end">Price</th>
-                    <th class="text-end">TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if portfolio %}
-                {% for row in portfolio%}
-                <tr>
-                    <td class="text-start">{{ row["symbol"] }}</td>
-                    <td class="text-start">{{ row["name"] }}</td>
-                    <td class="text-end">{{ row["shares"] }}</td>
-                    <td class="text-end">{{ row["persymbolprice"] | usd }}</td>
-                    <td class="text-end"> {{ row["totalsymbolvalue"] | usd }}</td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td class="border-0 fw-bold text-end" colspan="4">Cash</td>
-                    <td class="border-0 text-end">{{ cash | usd }}</td>
-                </tr>
-                <tr>
-                    <td class="border-0 fw-bold text-end" colspan="4">TOTAL</td>
-                    <td class="border-0 w-bold text-end">{{ total | usd }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </main>
+
+<main class="container py-5 text-center">
+    
+    <h1>Groundup</h1>
+    <h3>
+        India's tailor made data collection service.
+    </h3>
+
+    <p>Input your parameters below to get matched to data collectors on a map</p>
+    <br>
+
+
+    <form action="/" method="post">
+        <h5>Location</h5>
+        
+        <div class="form-inline">
+            <label for="distance">Within</label>
+            <input type="number" id="distance" autocomplete="off" class="form-control mx-auto w-auto" min="0" name="distance" placeholder="number">
+            <label for="place">miles of</label><br>
+            <input id="place" autocomplete="off" class="form-control mx-auto w-auto" name="address" placeholder="address" type="text">
+        </div>
+        
+        <div class="mb-3">
+            <h5>Occupation</h5>
+            <select class="form-select mx-auto w-auto" name="occupation">
+                <option disabled="" selected="">Occupation</option>
+                    {% for row in occupation%}
+                        <option value="{{ row['occupation'] }}">{{ row['occupation'] }}</option>
+                    {% endfor %}         
+            </select>
+
+            <h5>Education</h5>
+            <select class="form-select mx-auto w-auto" name="education">
+                <option disabled="" selected="">Education</option>
+                    {% for row in education%}
+                        <option value="{{ row['education'] }}">{{ row['education'] }}</option>
+                    {% endfor %}
+            </select>
+
+            <h5>Sector</h5>
+            <select class="form-select mx-auto w-auto" name="sector">
+                <option disabled="" selected="">Sector</option>
+                    {% for row in sector%}
+                        <option value="{{ row['sector'] }}">{{ row['sector'] }}</option>
+                    {% endfor %}
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Match</button>
+    </form>
+
+</main>
+
 {% endblock %}
