@@ -59,7 +59,7 @@ def index():
 
         tograph = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
 
-        return render_template("map.html", tograph=tograph)
+        return render_template("map2.html", tograph=tograph)
     else:
         occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
         education = db.execute("SELECT DISTINCT education FROM datacollectors;")
@@ -160,22 +160,22 @@ def register():
 @app.route("/map")
 @login_required
 def map_endpoint():
+    # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
     myMap = folium.Map(location=[28.6139, 77.2090],
             zoom_start=6,
             tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            attr='My Data Attribution')    
-    
-    item = 28.6139, 77.2090
+            attr='Attribution to OpenStreetMaps')    
 
-    folium.Marker(location = item).add_to(myMap)
-
+    # Retrieve the location from our sql table datacollectors. This outputs in the form of a list of dictionaries.
     location = db.execute("SELECT lat, lng FROM datacollectors;")
-    print(location)
 
+    # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
+    # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
     for item in location:
         x = item["lat"]
         y = item["lng"]
         folium.Marker([x, y], popup="<i>Data Collector</i>").add_to(myMap)
 
+    # Saves the changes on the html page. 
     myMap.save("templates/map2.html")
     return render_template("map2.html")
