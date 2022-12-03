@@ -11,6 +11,8 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+import folium
+import geopandas
 import geopy
 import sys
 
@@ -158,4 +160,22 @@ def register():
 @app.route("/map")
 @login_required
 def map_endpoint():
-    return render_template("map.html")
+    myMap = folium.Map(location=[28.6139, 77.2090],
+            zoom_start=6,
+            tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            attr='My Data Attribution')    
+    
+    item = 28.6139, 77.2090
+
+    folium.Marker(location = item).add_to(myMap)
+
+    location = db.execute("SELECT lat, lng FROM datacollectors;")
+    print(location)
+
+    for item in location:
+        x = item["lat"]
+        y = item["lng"]
+        folium.Marker([x, y], popup="<i>Data Collector</i>").add_to(myMap)
+
+    myMap.save("templates/map2.html")
+    return render_template("map2.html")
