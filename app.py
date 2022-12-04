@@ -16,6 +16,7 @@ import geopandas
 import geopy
 import sys
 
+from popup_html import popup_html
 from helpers import reversegeocode, geocode, apology, login_required, lookup
 
 # Configure application
@@ -167,14 +168,20 @@ def map_endpoint():
             attr='Attribution to OpenStreetMaps')    
 
     # Retrieve the location from our sql table datacollectors. This outputs in the form of a list of dictionaries.
-    location = db.execute("SELECT lat, lng FROM datacollectors;")
+    collector_info = db.execute("SELECT * FROM datacollectors;")
 
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
-    for item in location:
+    for item in collector_info:
         x = item["lat"]
         y = item["lng"]
-        folium.Marker([x, y], popup="<i>Data Collector</i>").add_to(myMap)
+
+        # uses the popup_html helper function to create the "profiles" when you click on the marker
+        html = popup_html(item)
+        popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+
+        # Creates the markers at the desired location with the correct popups
+        folium.Marker([x, y], popup=popup).add_to(myMap)
 
     # Saves the changes on the html page. 
     myMap.save("templates/map2.html")
