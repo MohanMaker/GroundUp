@@ -30,7 +30,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///groundup.db")
 
-
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -58,9 +57,12 @@ def index():
         lngmin = lng - radius
         lngmax = lng + radius
 
-        tograph = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
+        addtofiltered = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
 
-        return render_template("map2.html", tograph=tograph)
+        for row in addtofiltered:
+            db.execute("INSERT INTO filtered (firstname, lastname, lat, lng, occupation, education, sector) VALUES (?, ?, ?, ?, ?, ?, ?);", row["firstname"], row["lastname"], row["lat"], row["lng"], row["occupation"], row["education"], row["sector"])
+
+        return redirect("/map")
     else:
         occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
         education = db.execute("SELECT DISTINCT education FROM datacollectors;")
@@ -167,8 +169,8 @@ def map_endpoint():
             tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
             attr='Attribution to OpenStreetMaps')    
 
-    # Retrieve the location from our sql table datacollectors. This outputs in the form of a list of dictionaries.
-    collector_info = db.execute("SELECT * FROM datacollectors;")
+    # Retrieve the location from our sql table filtered. This outputs in the form of a list of dictionaries.
+    collector_info = db.execute("SELECT * FROM filtered;")
 
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
@@ -185,4 +187,7 @@ def map_endpoint():
 
     # Saves the changes on the html page. 
     myMap.save("templates/map2.html")
+
+    # Delete all elements from filtered table so you can graph more things in the future
+    db.execute("DELETE FROM filtered;")
     return render_template("map2.html")
