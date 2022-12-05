@@ -9,6 +9,14 @@
 .form-inline label {
 margin: 5px 10px 5px 0;
 }
+
+.col-sm-4{
+    width: 65%;
+}
+
+.col-sm-8 {
+    width: 35%;
+}
   
 nav .navbar-brand
 {
