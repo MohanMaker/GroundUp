@@ -36,36 +36,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/", methods=["GET", "POST"])
-@login_required
-def index():
-    if request.method == "POST":
-        # Get inputs from user
-        distance = request.form.get("distance")
-        address = request.form.get("address")
-        occupation = str(request.form.get("occupation"))
-        degree = str(request.form.get("degree"))
-        sector = str(request.form.get("sector"))
-
-        if geocode(address) == 1:
-            apology("Unrecognized location", 403) 
-        lat, lng = geocode(address)
-        radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
-        latmin = lat - radius
-        latmax = lat + radius
-        lngmin = lng - radius
-        lngmax = lng + radius
-
-        # Add contents selected by filters into filtered table to graph
-        db.execute("INSERT INTO datacollectorsfiltered SELECT * FROM datacollectors WHERE occupation = ? AND degree = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, degree, sector, latmin, latmax, lngmin, lngmax)
-
-        return redirect("/map")
-    else:
-        occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
-        degree = db.execute("SELECT DISTINCT degree FROM datacollectors;")
-        sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
-        return render_template("index.html", occupation=occupation, degree=degree, sector=sector)
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -94,6 +64,9 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
+        # Remember what type of user is logged in (collector or client)
+        session["type"] = rows[0]["type"]
+
         # Redirect user to home page
         return redirect("/")
 
@@ -121,6 +94,11 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
+        if request.form['submit'] == 'collector':
+            type = 'collector';
+        else:
+            type = 'client'
+
         # Validate username
         if username == '' or len(db.execute("SELECT * FROM users WHERE username = ?", username)) != 0:
             return apology("Enter a valid username", 400)
@@ -129,7 +107,7 @@ def register():
         if password == '' or confirmation == '' or password != confirmation:
             return apology("Enter a valid password", 400)
 
-        db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), 'collector')
+        db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), type)
 
         flash("Registered!")
 
@@ -137,6 +115,47 @@ def register():
 
     else:
         return render_template("register.html")
+
+@app.route("/", methods=["GET", "POST"])
+@login_required
+def index():
+    if session.get("type") == 'client':
+        if request.method == "POST":
+            # submit results of form to database
+
+            # Get inputs from user
+            distance = request.form.get("distance")
+            address = request.form.get("address")
+            occupation = str(request.form.get("occupation"))
+            degree = str(request.form.get("degree"))
+            sector = str(request.form.get("sector"))
+
+            if geocode(address) == 1:
+                apology("Unrecognized location", 403) 
+            lat, lng = geocode(address)
+            radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
+            latmin = lat - radius
+            latmax = lat + radius
+            lngmin = lng - radius
+            lngmax = lng + radius
+
+            # Add contents selected by filters into filtered table to graph
+            db.execute("INSERT INTO datacollectorsfiltered SELECT * FROM datacollectors WHERE occupation = ? AND degree = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, degree, sector, latmin, latmax, lngmin, lngmax)
+
+            return redirect("/map")
+        else:
+            # set up the form to be filled out
+            occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
+            degree = db.execute("SELECT DISTINCT degree FROM datacollectors;")
+            sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
+            return render_template("index.html", occupation=occupation, degree=degree, sector=sector)
+
+    elif session.get("type") == 'collector':
+        return render_template("collector.html")
+        # todo: add page where collectors can edit their profiles in collector.html
+        # rename index to client
+        # create a main landing page
+
 
 @app.route("/map")
 @login_required
@@ -188,7 +207,6 @@ def map_endpoint():
     db.execute("DELETE FROM datacollectorsfiltered;")
 
     return redirect("/full_map")
-
 
 @app.route("/full_map")
 @login_required
