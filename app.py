@@ -175,10 +175,6 @@ def map_endpoint():
         # If we have not applied filters, show all of the data collectors
         collector_info = db.execute("SELECT * FROM datacollectors;")
 
-    # TODO:
-    # Fix map reloading issues
-    # Make it cented on the average lat and lng
-
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
     for item in collector_info:
