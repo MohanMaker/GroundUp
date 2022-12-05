@@ -13,7 +13,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flask_session import Session
-from helpers import apology, geocode, login_required, lookup, reversegeocode
+from helpers import geocode, reversegeocode, login_required, apology
 from popup_html import popup_html
 
 # Configure application
@@ -129,7 +129,7 @@ def register():
         if password == '' or confirmation == '' or password != confirmation:
             return apology("Enter a valid password", 400)
 
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?);", username, generate_password_hash(password))
+        db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), 'collector')
 
         flash("Registered!")
 
