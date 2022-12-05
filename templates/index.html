@@ -36,11 +36,11 @@
                     {% endfor %}         
             </select>
 
-            <h5>Education</h5>
-            <select class="form-select mx-auto w-auto" name="education">
-                <option disabled="" selected="">Education</option>
-                    {% for row in education%}
-                        <option value="{{ row['education'] }}">{{ row['education'] }}</option>
+            <h5>Degree</h5>
+            <select class="form-select mx-auto w-auto" name="degree">
+                <option disabled="" selected="">Degree</option>
+                    {% for row in degree%}
+                        <option value="{{ row['degree'] }}">{{ row['degree'] }}</option>
                     {% endfor %}
             </select>
 

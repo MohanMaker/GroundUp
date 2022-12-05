@@ -4,7 +4,7 @@ def popup_html(item):
     lastname = item["lastname"]
     name = firstname + " " + lastname
     occupation = item["occupation"]
-    education = item["education"]
+    degree = item["degree"]
     sector = item["sector"]
 
     # put into an html format, this allows it to show up formatted through tables in the html page
@@ -22,7 +22,7 @@ def popup_html(item):
     </thead>
     <tbody>
     <tr>
-        <td class="tg-0pky">Education: """+ education +"""</td>
+        <td class="tg-0pky">Degree: """+ degree +"""</td>
     </tr>
     <tr>
         <td class="tg-0pky">Sector: """+ sector +"""</td>

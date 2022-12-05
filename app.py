@@ -1,8 +1,5 @@
 # username = groundup
 # password = groundup
-# Implement map
-# Implement location filtering
-# Implement other filtering
 
 import os
 
@@ -38,7 +35,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
@@ -46,10 +42,12 @@ def index():
         # Get inputs from user
         distance = request.form.get("distance")
         address = request.form.get("address")
-        occupation = request.form.get("occupation")
-        education = request.form.get("education")
-        sector = request.form.get("sector")
+        occupation = str(request.form.get("occupation"))
+        degree = str(request.form.get("degree"))
+        sector = str(request.form.get("sector"))
 
+        if geocode(address) == 1:
+            apology("Unrecognized location", 403) 
         lat, lng = geocode(address)
         radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
         latmin = lat - radius
@@ -57,17 +55,15 @@ def index():
         lngmin = lng - radius
         lngmax = lng + radius
 
-        addtofiltered = db.execute("SELECT * FROM datacollectors WHERE occupation = ? AND education = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, education, sector, latmin, latmax, lngmin, lngmax)
-
-        for row in addtofiltered:
-            db.execute("INSERT INTO filtered (firstname, lastname, lat, lng, occupation, education, sector) VALUES (?, ?, ?, ?, ?, ?, ?);", row["firstname"], row["lastname"], row["lat"], row["lng"], row["occupation"], row["education"], row["sector"])
+        # Add contents selected by filters into filtered table to graph
+        db.execute("INSERT INTO datacollectorsfiltered SELECT * FROM datacollectors WHERE occupation = ? AND degree = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, degree, sector, latmin, latmax, lngmin, lngmax)
 
         return redirect("/map")
     else:
         occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
-        education = db.execute("SELECT DISTINCT education FROM datacollectors;")
+        degree = db.execute("SELECT DISTINCT degree FROM datacollectors;")
         sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
-        return render_template("index.html", occupation=occupation, education=education, sector=sector)
+        return render_template("index.html", occupation=occupation, degree=degree, sector=sector)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -162,15 +158,23 @@ def register():
 
 @app.route("/map")
 @login_required
-def map_endpoint():
+def map_endpoint()
     # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
     myMap = folium.Map(location=[28.6139, 77.2090],
             zoom_start=6,
             tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
             attr='Attribution to OpenStreetMaps')    
 
-    # Retrieve the location from our sql table filtered. This outputs in the form of a list of dictionaries.
-    collector_info = db.execute("SELECT * FROM filtered;")
+    if db.execute("SELECT COUNT(*) FROM datacollectorsfiltered;")[0]['COUNT(*)'] != 0:
+        # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
+        collector_info = db.execute("SELECT * FROM datacollectorsfiltered;")
+    else:
+        # If we have not applied filters, show all of the data collectors
+        collector_info = db.execute("SELECT * FROM datacollectors;")
+
+    # TODO:
+    # Fix map reloading issues
+    # Make it cented on the average lat and lng
 
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
@@ -188,6 +192,7 @@ def map_endpoint():
     # Saves the changes on the html page. 
     myMap.save("templates/map2.html")
 
-    # Delete all elements from filtered table so you can graph more things in the future
-    db.execute("DELETE FROM filtered;")
+    # Delete all elements from filtered data collectors table so things map can be generated again in the future.
+    db.execute("DELETE FROM datacollectorsfiltered;")
+
     return render_template("map2.html")

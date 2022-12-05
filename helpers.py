@@ -23,10 +23,12 @@ def reversegeocode(lat, lng):
     return output
 
 def geocode(address):
-    location = geolocator.geocode(address)
- 
-    lat = location.latitude
-    lng = location.longitude
+    try:
+        location = geolocator.geocode(address)
+        lat = location.latitude
+        lng = location.longitude
+    except:
+        return 1;   
 
     return lat, lng
 
