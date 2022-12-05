@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_fb4318388fcaee4fc2008ba55c72f960 {
+                #map_3f4669dadf6006a859e303b41da052c7 {
                     position: relative;
                     width: 100.0%;
                     height: 90.0%;
@@ -38,16 +38,16 @@
 <body>
     
     
-            <div class="folium-map" id="map_fb4318388fcaee4fc2008ba55c72f960" ></div>
+            <div class="folium-map" id="map_3f4669dadf6006a859e303b41da052c7" ></div>
         
 </body>
 <script>
     
     
-            var map_fb4318388fcaee4fc2008ba55c72f960 = L.map(
-                "map_fb4318388fcaee4fc2008ba55c72f960",
+            var map_3f4669dadf6006a859e303b41da052c7 = L.map(
+                "map_3f4669dadf6006a859e303b41da052c7",
                 {
-                    center: [28.6139, 77.209],
+                    center: [23.99127518607703, 73.30588698255438],
                     crs: L.CRS.EPSG3857,
                     zoom: 6,
                     zoomControl: true,
@@ -59,28 +59,70 @@
 
         
     
-            var tile_layer_971860a1324007c74afa37b3a60788bf = L.tileLayer(
+            var tile_layer_23f324f34ab13563004445e8694fb118 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {"attribution": "Attribution to OpenStreetMaps", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_fb4318388fcaee4fc2008ba55c72f960);
+            ).addTo(map_3f4669dadf6006a859e303b41da052c7);
         
     
-            var marker_4351c38d3d3b0a421689c88b5683b830 = L.marker(
+            var marker_361972ca523fab181fcae798dfcc3582 = L.marker(
+                [21.274469080688093, 71.81579178619144],
+                {}
+            ).addTo(map_3f4669dadf6006a859e303b41da052c7);
+        
+    
+        var popup_75b70f42cf76cd6b0065b8ff3b181f59 = L.popup({"maxWidth": 500});
+
+        
+            
+                var html_853acbf73e05113fe3b8b5e6e192ccd7 = $(`<div id="html_853acbf73e05113fe3b8b5e6e192ccd7" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Krishna Narayan</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <thead>     <tr>         <th class="tg-0pky">Occupation: teacher</th>     </tr>     </thead>     <tbody>     <tr>         <td class="tg-0pky">Degree: batchelors</td>     </tr>     <tr>         <td class="tg-0pky">Sector: education</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
+                popup_75b70f42cf76cd6b0065b8ff3b181f59.setContent(html_853acbf73e05113fe3b8b5e6e192ccd7);
+            
+        
+
+        marker_361972ca523fab181fcae798dfcc3582.bindPopup(popup_75b70f42cf76cd6b0065b8ff3b181f59)
+        ;
+
+        
+    
+    
+            var marker_e3118c17c8c064147c6d57748d06e52d = L.marker(
                 [27.187629561182767, 74.5901423584346],
                 {}
-            ).addTo(map_fb4318388fcaee4fc2008ba55c72f960);
+            ).addTo(map_3f4669dadf6006a859e303b41da052c7);
         
     
-        var popup_415afd41ebc523b83ee2259e0cc4f971 = L.popup({"maxWidth": 500});
+        var popup_371627bacc037441befdc57feccc395f = L.popup({"maxWidth": 500});
 
         
             
-                var html_f9727cec7f6cfde86deb943649e45669 = $(`<div id="html_f9727cec7f6cfde86deb943649e45669" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Nitesh Verma</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <thead>     <tr>         <th class="tg-0pky">Occupation: village level entrepreneur</th>     </tr>     </thead>     <tbody>     <tr>         <td class="tg-0pky">Degree: batchelors</td>     </tr>     <tr>         <td class="tg-0pky">Sector: education</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
-                popup_415afd41ebc523b83ee2259e0cc4f971.setContent(html_f9727cec7f6cfde86deb943649e45669);
+                var html_f9bfd8d5380d870e86386437092d26ea = $(`<div id="html_f9bfd8d5380d870e86386437092d26ea" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Nitesh Verma</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <thead>     <tr>         <th class="tg-0pky">Occupation: village level entrepreneur</th>     </tr>     </thead>     <tbody>     <tr>         <td class="tg-0pky">Degree: batchelors</td>     </tr>     <tr>         <td class="tg-0pky">Sector: education</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
+                popup_371627bacc037441befdc57feccc395f.setContent(html_f9bfd8d5380d870e86386437092d26ea);
             
         
 
-        marker_4351c38d3d3b0a421689c88b5683b830.bindPopup(popup_415afd41ebc523b83ee2259e0cc4f971)
+        marker_e3118c17c8c064147c6d57748d06e52d.bindPopup(popup_371627bacc037441befdc57feccc395f)
+        ;
+
+        
+    
+    
+            var marker_a271cfcbb5212e99e28899a673ee9c35 = L.marker(
+                [23.511726916360224, 73.51172680303709],
+                {}
+            ).addTo(map_3f4669dadf6006a859e303b41da052c7);
+        
+    
+        var popup_c3d7a1cc5628febab0fb8f8bb281967d = L.popup({"maxWidth": 500});
+
+        
+            
+                var html_dc961b1d5b65e7ac3142b8d9e8f1c9de = $(`<div id="html_dc961b1d5b65e7ac3142b8d9e8f1c9de" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Lakshmi Siyaram</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <thead>     <tr>         <th class="tg-0pky">Occupation: anganwadi worker</th>     </tr>     </thead>     <tbody>     <tr>         <td class="tg-0pky">Degree: secondary</td>     </tr>     <tr>         <td class="tg-0pky">Sector: health</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
+                popup_c3d7a1cc5628febab0fb8f8bb281967d.setContent(html_dc961b1d5b65e7ac3142b8d9e8f1c9de);
+            
+        
+
+        marker_a271cfcbb5212e99e28899a673ee9c35.bindPopup(popup_c3d7a1cc5628febab0fb8f8bb281967d)
         ;
 
         

@@ -160,13 +160,6 @@ def register():
 @app.route("/map")
 @login_required
 def map_endpoint():
-    # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
-    myMap = folium.Map(location=[28.6139, 77.2090], 
-            width='100%',
-            height='90%',
-            zoom_start=6,
-            tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            attr='Attribution to OpenStreetMaps')    
 
     if db.execute("SELECT COUNT(*) FROM datacollectorsfiltered;")[0]['COUNT(*)'] != 0:
         # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
@@ -175,6 +168,25 @@ def map_endpoint():
         # If we have not applied filters, show all of the data collectors
         collector_info = db.execute("SELECT * FROM datacollectors;")
 
+    # find center lat and lng of the points to graph
+    count = 0
+    latsum = 0
+    lngsum = 0
+    for row in collector_info:
+        latsum += row["lat"]
+        lngsum += row["lng"]
+        count += 1
+    avglat = latsum / count
+    avglng = lngsum / count
+
+    # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
+    myMap = folium.Map(location=[avglat, avglng], 
+            width='100%',
+            height='90%',
+            zoom_start=6,
+            tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            attr='Attribution to OpenStreetMaps')    
+        
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
     for item in collector_info:
