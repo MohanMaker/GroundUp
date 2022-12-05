@@ -2,19 +2,19 @@
 # password = groundup
 
 import os
-
-from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
+import sys
 from tempfile import mkdtemp
-from werkzeug.security import check_password_hash, generate_password_hash
+
 import folium
 import geopandas
 import geopy
-import sys
+from cs50 import SQL
+from flask import Flask, flash, redirect, render_template, request, session
+from werkzeug.security import check_password_hash, generate_password_hash
 
+from flask_session import Session
+from helpers import apology, geocode, login_required, lookup, reversegeocode
 from popup_html import popup_html
-from helpers import reversegeocode, geocode, apology, login_required, lookup
 
 # Configure application
 app = Flask(__name__)
@@ -158,9 +158,11 @@ def register():
 
 @app.route("/map")
 @login_required
-def map_endpoint()
+def map_endpoint():
     # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
-    myMap = folium.Map(location=[28.6139, 77.2090],
+    myMap = folium.Map(location=[28.6139, 77.2090], 
+            width='100%',
+            height='90%',
             zoom_start=6,
             tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
             attr='Attribution to OpenStreetMaps')    
@@ -195,4 +197,10 @@ def map_endpoint()
     # Delete all elements from filtered data collectors table so things map can be generated again in the future.
     db.execute("DELETE FROM datacollectorsfiltered;")
 
-    return render_template("map2.html")
+    return redirect("/full_map")
+
+
+@app.route("/full_map")
+@login_required
+def full_map_page():
+    return render_template("map.html")
