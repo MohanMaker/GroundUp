@@ -1,6 +1,12 @@
 # username = groundup
 # password = groundup
 
+# todo: add page where collectors can edit their profiles in collector.html
+# rename index to client.html
+# create a main landing page that provides information about the product
+# improve header formatting in map page
+# improve login and register formatting (make 2 column style)
+
 import os
 import sys
 from tempfile import mkdtemp
@@ -152,10 +158,6 @@ def index():
 
     elif session.get("type") == 'collector':
         return render_template("collector.html")
-        # todo: add page where collectors can edit their profiles in collector.html
-        # rename index to client
-        # create a main landing page
-
 
 @app.route("/map")
 @login_required
