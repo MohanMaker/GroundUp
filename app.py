@@ -9,6 +9,7 @@
 # test filter function - basically it's bypassing if it's not included?
 # test mobile friendly
 # map navbar
+# random number in miles
 
 import os
 import sys
@@ -324,11 +325,6 @@ def map_endpoint():
     myMap.save("templates/map2.html")
 
     # Delete all elements from filtered data collectors table so things map can be generated again in the future.
-    #db.execute("DELETE FROM datacollectorsfiltered;")
+    db.execute("DELETE FROM datacollectorsfiltered;")
 
-    return redirect("/full_map")
-
-@app.route("/full_map")
-@login_required
-def full_map_page():
     return render_template("map.html")
