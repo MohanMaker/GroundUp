@@ -21,52 +21,46 @@
                 <br>
                 <br>
                 <h2>Collector Dashboard</h2>
-                <p>View and edit data collector</p>
+                <p>View and edit data collector profile</p>
             </div>
             <div class="col-sm-8">
+                <h2>Current Profile</h2>
+                <p>Name: {{ profile[0]["firstname"] }} {{ profile[0]["lastname"] }} </p>
+                <p>Location: {{ address["city"] }} {{ address["state"] }}, {{ address["country"] }} ({{ profile[0]["lat"] }}, {{ profile[0]["lng"] }})</p>
+                <p>Occupation: {{ profile[0]["occupation"] }}</p>
+                <p>Degree: {{ profile[0]["degree"] }}</p>
+                <p>Sector: {{ profile[0]["sector"] }}</p>
+
                 <form action="/" method="post">
-                    <h2>Filter</h2>
+                    <h2>Edit Profile</h2>
                     <br>
                     
                     <h5>Location</h5>
                     <div class="mb-3">
-                        <label for="distance">Within</label>
-                        <input type="number" id="distance" autocomplete="off" class="form-control mx-auto w-auto" min="0" name="distance" placeholder="number">
-                        <label for="place">miles of</label><br>
+                        <input id="location" autocomplete="off" class="form-control mx-auto w-auto" name="address" placeholder="address" type="text">
                     </div>
 
+                    <br>
+
+                    <h5>Occupation</h5>
                     <div class="mb-3">
-                        <input id="place" autocomplete="off" class="form-control mx-auto w-auto" name="address" placeholder="address" type="text">
+                        <input id="occupation" autocomplete="off" class="form-control mx-auto w-auto" name="occupation" placeholder="occupation" type="text">
                     </div>
                     
+                    <br>
+                    
+                    <h5>Degree</h5>
                     <div class="mb-3">
-                        <br>
-                        <h5>Occupation</h5>
-                        <select class="form-select mx-auto w-auto" name="occupation">
-                            <option disabled="" selected="">Occupation</option>
-                                {% for row in occupation%}
-                                    <option value="{{ row['occupation'] }}">{{ row['occupation'] }}</option>
-                                {% endfor %}         
-                        </select>
-                        
-                        <br>
-                        <h5>Degree</h5>
-                        <select class="form-select mx-auto w-auto" name="degree">
-                            <option disabled="" selected="">Degree</option>
-                                {% for row in degree%}
-                                    <option value="{{ row['degree'] }}">{{ row['degree'] }}</option>
-                                {% endfor %}
-                        </select>
-                        
-                        <br>
-                        <h5>Sector</h5>
-                        <select class="form-select mx-auto w-auto" name="sector">
-                            <option disabled="" selected="">Sector</option>
-                                {% for row in sector%}
-                                    <option value="{{ row['sector'] }}">{{ row['sector'] }}</option>
-                                {% endfor %}
-                        </select>
+                        <input id="degree" autocomplete="off" class="form-control mx-auto w-auto" name="degree" placeholder="degree" type="text">
                     </div>
+                        
+                    <br>
+                    
+                    <h5>Sector</h5>
+                    <div class="mb-3">
+                        <input id="sector" autocomplete="off" class="form-control mx-auto w-auto" name="sector" placeholder="sector" type="text">
+                    </div>  
+
                     <br>
                     <button class="btn btn-primary" type="submit">Match</button>
                 </form>

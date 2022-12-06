@@ -5,7 +5,7 @@
 # create a main landing page that provides information about the product
 # improve header formatting in map page
 # improve login and register formatting (make 2 column style)
-# make fields not required and remove map in top header
+# make fields not required and enable filtering of only certain felildsremove map in top header
 # make fields in filter on one line
 # forgot password functionality
 
@@ -159,7 +159,12 @@ def index():
             return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
     elif session.get("type") == 'collector':
-        return render_template("collector.html")
+        if request.method == "POST":
+            return todo
+        else:
+            profile = db.execute("SELECT * FROM datacollectors WHERE id = 1;")
+            address = reversegeocode(profile[0]["lat"], profile[0]["lng"])
+            return render_template("collector.html", profile=profile, address=address)
 
 @app.route("/map")
 @login_required
