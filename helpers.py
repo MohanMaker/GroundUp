@@ -1,10 +1,7 @@
-import os
-import requests
-import urllib.parse
 from geopy.geocoders import Nominatim
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, session
 from functools import wraps
 
 def reversegeocode(lat, lng):

@@ -7,8 +7,10 @@ We enable researchers, government, and private companies to obtain high quality,
 - Ensure you are in the Groundup folder
 - Check if pip is installed with `pip --version` 
 - If pip is not installed, install pip using [Online Guide](https://www.geeksforgeeks.org/download-and-install-pip-latest-version/) <br/>
+
 #### Run flask:
 - Install flask and other required dependencies with `pip3 install [name]`
+    - See requirements.txt for a list of all the dependencies that need to be installed
 - Create a Python environment with `python3 -m venv venv`
 - Execute `. venv/bin/activate` to activate the environement
 - Run `flask run` to start the website
