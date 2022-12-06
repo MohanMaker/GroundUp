@@ -24,7 +24,7 @@ We enable researchers, government, and private companies to obtain high quality,
 
 #### Clients:
 - Match with data collectors using the filter in the dashboard. 
-- Click the 'Match' button or the 'Map' navbar to view the interactive map. 
+- Click the 'Match' button to view the interactive map. 
 - If you input no parameters in the filter, you should be able to see all data collectors
 <br>
 
