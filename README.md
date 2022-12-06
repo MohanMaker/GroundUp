@@ -12,10 +12,9 @@ We enable researchers, government, and private companies to obtain high quality,
 - Create a Python environment with `python3 -m venv venv`
 - Execute `. venv/bin/activate` to activate the environement
 - Run `flask run` to start the website
-<br>
 
 #### Run website:
-- Check terminal. IT should output something like (http://127.0.0.1:5000). Copy and paste into your browser.
+- Check terminal. It should output something like (http://127.0.0.1:5000). Copy and paste into your browser.
 - Register as a new user. Choose to be either a data collector or a client. 
 
 
