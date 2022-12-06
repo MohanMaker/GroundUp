@@ -33,7 +33,5 @@ We enable researchers, government, and private companies to obtain high quality,
 👤 **Alex Wong**
 - Github: AlexW1001
 
-<br>
-
 👤 **Mohan Hathi**
 - Github: MohanMaker
