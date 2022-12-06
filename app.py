@@ -6,7 +6,6 @@
 #2|Nitesh|Verma|27.1876295611828|74.5901423584346|village level entrepreneur|batchelors|education
 #3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
 # make up more data collectors
-# test filter function - basically it's bypassing if it's not included?
 # test mobile friendly
 # map navbar
 # random number in miles
@@ -303,10 +302,9 @@ def map_endpoint():
     # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
     myMap = folium.Map(location=[avglat, avglng], 
             width='100%',
-            height='90%',
+            height='100%',
             zoom_start=6,
-            tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            attr='Attribution to OpenStreetMaps')    
+            position='relative')    
         
     # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
     # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
@@ -322,7 +320,7 @@ def map_endpoint():
         folium.Marker([x, y], popup=popup).add_to(myMap)
 
     # Saves the changes on the html page. 
-    myMap.save("templates/map2.html")
+    myMap.save("templates/mapdata.html")
 
     # Delete all elements from filtered data collectors table so things map can be generated again in the future.
     db.execute("DELETE FROM datacollectorsfiltered;")
