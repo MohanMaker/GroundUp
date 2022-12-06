@@ -1,11 +1,13 @@
 # username = groundup
 # password = groundup
 
-# fix formattting of collector.html
-# improve header formatting in map page
-# make fields not required and enable filtering of only certain felilds. remove map in top header
-# forgot password functionality
-# register as a data collector - input all the params and associate with login
+
+#1|Krishna|Narayan|21.2744690806881|71.8157917861914|teacher|batchelors|education
+#2|Nitesh|Verma|27.1876295611828|74.5901423584346|village level entrepreneur|batchelors|education
+#3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
+# make up more data collectors
+# test filter function - basically it's bypassing if it's not included?
+# remove null values from filter function rn
 
 import os
 import sys
@@ -73,6 +75,11 @@ def login():
         # Remember what type of user is logged in (collector or client)
         session["type"] = rows[0]["type"]
 
+        # create a new empty data collector linked to the user (if the user is a data collector)
+        if session["type"] == 'collector':
+            userid = session["user_id"]
+            db.execute("INSERT INTO datacollectors (userid) VALUES (?);", userid)
+
         # Redirect user to home page
         return redirect("/")
 
@@ -100,11 +107,6 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
-        if request.form['submit'] == 'collector':
-            type = 'collector';
-        else:
-            type = 'client'
-
         # Validate username
         if username == '' or len(db.execute("SELECT * FROM users WHERE username = ?", username)) != 0:
             return apology("enter a valid username", 400)
@@ -112,6 +114,11 @@ def register():
         # Validate password
         if password == '' or confirmation == '' or password != confirmation:
             return apology("enter a valid password", 400)
+
+        if request.form['submit'] == 'collector':
+            type = 'collector';
+        else:
+            type = 'client'
 
         db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), type)
 
@@ -136,17 +143,71 @@ def index():
             degree = str(request.form.get("degree"))
             sector = str(request.form.get("sector"))
 
-            if geocode(address) == 1:
+            if distance == "" or address == "":
+                pass
+            elif geocode(address) == 1:
                 return apology("unrecognized location", 403) 
-            lat, lng = geocode(address)
-            radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
-            latmin = lat - radius
-            latmax = lat + radius
-            lngmin = lng - radius
-            lngmax = lng + radius
+            else:
+                lat, lng = geocode(address)
+                radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
+                latmin = lat - radius
+                latmax = lat + radius
+                lngmin = lng - radius
+                lngmax = lng + radius
+
+            # Append to datacollectors filtered based on the inputs from the user, handling blank inputs
+            select = "INSERT INTO datacollectorsfiltered SELECT id, firstname, lastname, lat, lng, occupation, degree, sector FROM datacollectors"
+            first = 0
+
+            def fillerchars(first, select):
+                if first == 0:
+                    select += " WHERE"
+                if first == 1:
+                    select += " AND"
+                first = 1
+                return first, select
+
+            if occupation != "":
+                first, select = fillerchars(first, select)
+                select += " occupation = ?"
+            else:
+                first, select = fillerchars(first, select)
+                select += " occupation IS NOT NULL"
+            if degree != "":
+                first, select = fillerchars(first, select)
+                select += " degree = ?"
+            else:
+                first, select = fillerchars(first, select)
+                select += " degree IS NOT NULL"
+            if sector != "":
+                first, select = fillerchars(first, select)
+                select += " sector = ?"
+            else:
+                first, select = fillerchars(first, select)
+                select += " sector IS NOT NULL"
+            if distance == "" or address == "":
+                first, select = fillerchars(first, select)
+                select += " lat IS NOT NULL AND lng IS NOT NULL"
+            else:
+                first, select = fillerchars(first, select)
+                select += " (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?)"
+
+            arguments = []
+            if occupation != "":
+                arguments.append(occupation)
+            if degree != "":
+                arguments.append(degree)
+            if sector != "":
+                arguments.append(sector)
+            if not(distance == "" or address == ""):
+                arguments.append(latmin)
+                arguments.append(latmax)
+                arguments.append(lngmin)
+                arguments.append(lngmax)
+            arguments = tuple(arguments)
 
             # Add contents selected by filters into filtered table to graph
-            db.execute("INSERT INTO datacollectorsfiltered SELECT * FROM datacollectors WHERE occupation = ? AND degree = ? AND sector = ? AND (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?);", occupation, degree, sector, latmin, latmax, lngmin, lngmax)
+            db.execute(select, *arguments)
 
             return redirect("/map")
         else:
@@ -157,9 +218,14 @@ def index():
             return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
     elif session.get("type") == 'collector':
-        collectorid = 1;
+        userid = session["user_id"]
         if request.method == "POST":
-            if request.form['updatebtn'] == 'location':
+            if request.form['updatebtn'] == 'name':
+                firstname = str(request.form.get("firstname"))
+                lastname = str(request.form.get("lastname"))
+                db.execute("UPDATE datacollectors SET firstname = ?, lastname = ? WHERE userid = ?;", firstname, lastname, userid)
+
+            elif request.form['updatebtn'] == 'location':
                 lat = request.form.get("latitude")
                 lng = request.form.get("longitude")
                 print(lat, file=sys.stderr)
@@ -169,21 +235,22 @@ def index():
                 if reversegeocode(lat, lng) == 1:
                     return apology("enter a valid lat and lng", 403)
 
-                db.execute("UPDATE datacollectors SET lat = ?, lng = ? WHERE id = ?;", lat, lng, collectorid)
+                db.execute("UPDATE datacollectors SET lat = ?, lng = ? WHERE userid = ?;", lat, lng, userid)
             elif request.form['updatebtn'] == 'occupation':
                 occupation = str(request.form.get("occupation"))
-                db.execute("UPDATE datacollectors SET occupation = ? WHERE id = ?;", occupation, collectorid)
+                db.execute("UPDATE datacollectors SET occupation = ? WHERE userid = ?;", occupation, userid)
             elif request.form['updatebtn'] == 'degree':
                 degree = str(request.form.get("degree"))
-                db.execute("UPDATE datacollectors SET degree = ? WHERE id = ?;", degree, collectorid)
+                db.execute("UPDATE datacollectors SET degree = ? WHERE userid = ?;", degree, userid)
             elif request.form['updatebtn'] == 'sector':
                 sector = str(request.form.get("sector"))
-                db.execute("UPDATE datacollectors SET sector = ? WHERE id = ?;", sector, collectorid)
+                db.execute("UPDATE datacollectors SET sector = ? WHERE userid = ?;", sector, userid)
             return redirect("/")
         else:
-            profile = db.execute("SELECT * FROM datacollectors WHERE id = ?;", collectorid)
+            profile = db.execute("SELECT * FROM datacollectors WHERE userid = ?;", userid)
             address = reversegeocode(profile[0]["lat"], profile[0]["lng"])
-            return render_template("collector.html", profile=profile, address=address)
+            username = db.execute("SELECT username FROM users WHERE id = ?", userid)[0]["username"]
+            return render_template("collector.html", profile=profile, address=address, username=username)
 
 @app.route("/map")
 @login_required
@@ -191,10 +258,10 @@ def map_endpoint():
 
     if db.execute("SELECT COUNT(*) FROM datacollectorsfiltered;")[0]['COUNT(*)'] != 0:
         # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
-        collector_info = db.execute("SELECT * FROM datacollectorsfiltered;")
+        collector_info = db.execute("SELECT * FROM datacollectorsfiltered WHERE lat IS NOT NULL AND lng is NOT NULL;")
     else:
         # If we have not applied filters, show all of the data collectors
-        collector_info = db.execute("SELECT * FROM datacollectors;")
+        collector_info = db.execute("SELECT * FROM datacollectors WHERE lat IS NOT NULL AND lng is NOT NULL;")
 
     # find center lat and lng of the points to graph
     count = 0

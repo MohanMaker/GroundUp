@@ -21,22 +21,36 @@
                 <br>
                 <br>
                 <h2>Collector Dashboard</h2>
-                <p>View and edit data collector profile</p>
+                <p>View and update data collector profile</p>
             </div>
             <div class="col-sm-8">
                 <h2>Current Profile</h2>
-                <br>
+                <p>(username: {{ username }})</p>
                 <p><strong>Name:</strong> {{ profile[0]["firstname"] }} {{ profile[0]["lastname"] }} </p>
-                <p><strong>Location:</strong> {{ address["city"] }} {{ address["state"] }}, {{ address["country"] }} ({{ profile[0]["lat"] | round(3) }}, {{ profile[0]["lng"] | round(3)}})</p>
+                {% if address == 1 %}
+                    <p><strong>Location:</strong> None</p>
+                {% else %}
+                    <p><strong>Location:</strong> {{ address["city"] }} {{ address["state"] }} {{ address["country"] }} ({{ profile[0]["lat"] | round(3) }}, {{ profile[0]["lng"] | round(3)}})</p>
+                {% endif %}
                 <p><strong>Occupation:</strong> {{ profile[0]["occupation"] }}</p>
                 <p><strong>Degree:</strong> {{ profile[0]["degree"] }}</p>
                 <p><strong>Sector:</strong> {{ profile[0]["sector"] }}</p>
 
                 <form action="/" method="post">
                     <br><br>
-                    <h2>Edit Profile</h2>
+                    <h2>Update Profile</h2>
                     <br>
                     
+                    <h5>New Name</h5>
+                    <div class="mb-3">
+                        <input id="firstname" autocomplete="off" class="form-control mx-auto w-auto" name="firstname" placeholder="first name" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <input id="lastname" autocomplete="off" class="form-control mx-auto w-auto" name="lastname" placeholder="last name" type="text">
+                    </div>
+                    <button class="btn btn-primary" type="submit" name="updatebtn" value="name">Update</button>
+                    <br><br>
+
                     <h5>New Location</h5>
                     <div class="mb-3">
                         <input id="latitude" autocomplete="off" class="form-control mx-auto w-auto" name="latitude" placeholder="latitude" type="number" step="any">
@@ -60,6 +74,7 @@
                     </div>  
                     <button class="btn btn-primary" type="submit" name="updatebtn" value="degree">Update</button>
                     <br><br>
+
                     <h5>New Sector</h5>
                     <div class="mb-3">
                         <input id="sector" autocomplete="off" class="form-control mx-auto w-auto" name="sector" placeholder="sector" type="text">
