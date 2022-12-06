@@ -21,6 +21,14 @@ margin: 5px 10px 5px 0;
     padding: 60px
 }
 
+/* Make dashboard mobile friendly */
+@media only screen and (max-width: 768px) {
+  .row {
+     display: block;
+  }
+}
+
+/* div sizing for non-mobile dashboard */
 .col-sm-4{
     width: 50%;
 }
@@ -28,7 +36,7 @@ margin: 5px 10px 5px 0;
 .col-sm-8 {
     width: 50%;
 }
-  
+
 nav .navbar-brand
 {
     font-size: xx-large;
@@ -53,10 +61,10 @@ nav .navbar-brand .green
 }
 
 
-/* Credit to W3 Schools for popup*/
+/* Credit to W3 Schools for helping w/ popup */
 {box-sizing: border-box;}
 
-/* Button used to open the contact form - fixed at the bottom of the page */
+/* Button used to open the popup form */
 .open-button {
   background-color: #555;
   color: white;
