@@ -5,35 +5,43 @@
 {% endblock %}
 
 {% block main %}
-    <h3>Register as a data collector</h3>
-    <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password (again)" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit" name="submit" value="collector">Register</button>
-    </form>
-
-    <br>
-    <br>
-
-    <h3>Register as a client</h3>
-    <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password (again)" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit" name="submit" value="client">Register</button>
-    </form>
-
+<div class ="tg1">
+    <table class="tg">
+        <thead>
+          <tr>
+            <td class="tg-0laxhalf">
+                <h3>Register as a data collector</h3>
+                <form action="/register" method="post">
+                    <div class="mb-3">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password (again)" type="password">
+                    </div>
+                    <button class="btn btn-primary" type="submit" name="submit" value="collector">Register</button>
+                </form>        
+            </td>
+            <td class="tg-0laxhalf">
+                <h3>Register as a client</h3>
+                <form action="/register" method="post">
+                    <div class="mb-3">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password (again)" type="password">
+                    </div>
+                    <button class="btn btn-primary" type="submit" name="submit" value="client">Register</button>
+                </form>        
+            </td>
+          </tr>
+        </thead>
+    </table>    
+</div>
 {% endblock %}
+
