@@ -17,10 +17,11 @@
     </form>
     <br>
     <br>
+    
     <!--Forgot Password button: click it and it opens a new form that lets you change your password-->
-
     <button class="btn btn-secondary" type="forgot" onclick="openForm()">Forgot Password?</button>
 
+    <!-- Forgot Password Popup Form: -->
     <form action="/forgot" method="post">
         <div class="form-popup" id="myForm">        
             <br>
@@ -31,7 +32,8 @@
             <button type="submit" class="btn btn-danger">Reset</button>
             <button type="button" class="btn btn-secondary" onclick="closeForm()">Close</button>
         </div>
-          
+        
+        <!-- JS functionality to open and close popup -->
           <script>
           function openForm() {
             document.getElementById("myForm").style.display = "block";

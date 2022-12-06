@@ -1,4 +1,3 @@
-
 {% extends "layout.html" %}
 
 {% block title %}
@@ -10,12 +9,13 @@
     https://getbootstrap.com/docs/5.2/layout/columns/-->
     <div class="container md-5">
         <div class="row">
+            <!-- Left side gives the user information on how to use the filter-->
             <div class="col-sm-4">
                 <h1>Groundup</h1>
                 <h4>
                     India's tailor-made data collection service
                 </h4>
-                <!--https://creativefirst.film/wp-content/uploads/2022/03/Screenshot-2022-03-18-at-11.52.42-AM.png-->
+                <!--Image attribution: https://creativefirst.film/wp-content/uploads/2022/03/Screenshot-2022-03-18-at-11.52.42-AM.png-->
                 <div><img src="https://t4.ftcdn.net/jpg/03/17/67/17/360_F_317671777_x3V3tOViyPtEAsNFsV4Lmbk5q26HL9Q9.jpg" alt="India" width="100%" height="auto"></div>
                 <hr class="d-sm-none">
                 <br>
@@ -24,11 +24,17 @@
                 <h2>Client Dashboard</h2>
                 <p>Input study parameters to get matched to data collectors on a map</p>
             </div>
+            
+            <!-- Right side displays the filter-->
             <div class="col-sm-8">
+                
+                <!-- Ensures that inputs will be entered as "POST" -->
                 <form action="/" method="post">
                     <h2>Filter</h2>
                     <br>
                     <h5>Location</h5>
+                
+                    <!--Creating inputs: -->
                     <div class="mb-3">
                         <label for="distance">Within</label>
                         <input type="number" id="distance" autocomplete="off" class="form-control mx-auto w-auto" min="0" name="distance" placeholder="number">

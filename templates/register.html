@@ -5,12 +5,15 @@
 {% endblock %}
 
 {% block main %}
+<!-- Divided into two tables for two user types: left side is for collectors right side is clients. -->
 <div class ="tg1">
     <table class="tg">
         <thead>
           <tr>
+            <!--Left side of table: Data Collector registration-->
             <td class="tg-0laxhalf">
                 <h3>Register as a data collector</h3>
+                <!-- Creates inputs and buttons. Inputs use POST method -->
                 <form action="/register" method="post">
                     <div class="mb-3">
                         <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
@@ -24,6 +27,7 @@
                     <button class="btn btn-primary" type="submit" name="submit" value="collector">Register</button>
                 </form>        
             </td>
+            <!--Right side of table: Data Collector registration-->
             <td class="tg-0laxhalf">
                 <h3>Register as a client</h3>
                 <form action="/register" method="post">

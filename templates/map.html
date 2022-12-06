@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    
+    <!-- Creates new navbar - extending layout was being funky and adding unwanted whitespace -->    
     <head>
 
         <meta charset="utf-8">
@@ -20,7 +20,7 @@
     </head>
 
     <body>
-
+        <!-- Same as in layout -->
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/"><link rel="icon" type="image/png" href="/favicon.ico"/><span class="blue">Groundup</span></a>
@@ -44,6 +44,7 @@
             </div>
         </nav>
 
+        <!-- puts the map created with folium in the body of this page -->
         {% include "mapdata.html" %}
 
     </body>

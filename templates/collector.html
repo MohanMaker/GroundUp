@@ -14,16 +14,20 @@
                 <h4>
                     India's tailor-made data collection service
                 </h4>
-                <!--https://creativefirst.film/wp-content/uploads/2022/03/Screenshot-2022-03-18-at-11.52.42-AM.png-->
+                <!--Image Attribution: https://t4.ftcdn.net/jpg/03/17/67/17/360_F_317671777_x3V3tOViyPtEAsNFsV4Lmbk5q26HL9Q9.jpg-->
                 <div><img src="https://t4.ftcdn.net/jpg/03/17/67/17/360_F_317671777_x3V3tOViyPtEAsNFsV4Lmbk5q26HL9Q9.jpg" alt="India" width="100%" height="auto"></div>
                 <hr class="d-sm-none">
                 <br>
                 <br>
                 <br>
+                <!-- Page Description-->
                 <h2>Collector Dashboard</h2>
                 <p>View and update data collector profile</p>
             </div>
+            
+            <!-- Data Collector Information Input Section -->
             <div class="col-sm-8">
+                <!-- Displays user's profile information, taking info from database -->
                 <h2>Current Profile</h2>
                 <p>(username: {{ username }})</p>
                 <p><strong>Name:</strong> {{ profile[0]["firstname"] }} {{ profile[0]["lastname"] }} </p>
@@ -36,6 +40,7 @@
                 <p><strong>Degree:</strong> {{ profile[0]["degree"] }}</p>
                 <p><strong>Sector:</strong> {{ profile[0]["sector"] }}</p>
 
+                <!-- Allows user to update their profile info -->
                 <form action="/" method="post">
                     <br><br>
                     <h2>Update Profile</h2>

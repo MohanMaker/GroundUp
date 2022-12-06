@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
+<!-- Layout stores the navbar -->
     <head>
-
+        <!-- Import all needed dependencies like bootstrap and styles -->
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, width=device-width">
 
@@ -20,13 +20,15 @@
     </head>
 
     <body>
-
+        <!-- Creates the Navbar using Bootstrap -->
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/"><link rel="icon" type="image/png" href="/favicon.ico"/><span class="blue">Groundup</span></a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
+                <!-- Changes what's displayed on navbar depending on whether user is logged in or not. -->
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                         <ul class="navbar-nav ms-auto mt-2">
@@ -50,6 +52,7 @@
             </header>
         {% endif %}
 
+        <!-- This is where the normal "body" of html pages will go when navbar is extended-->
         <main class="container-fluid py-5 text-center">
             {% block main %}{% endblock %}
         </main>
