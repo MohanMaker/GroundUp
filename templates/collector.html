@@ -1,15 +1,76 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Collector
+    Collector Dashboard
 {% endblock %}
 
 {% block main %}
+<!--Bootstrap for formatting using columns and flexboxes
+    https://getbootstrap.com/docs/5.2/layout/columns/-->
+    <div class="container md-5">
+        <div class="row">
+            <div class="col-sm-4">
+                <h1>Groundup</h1>
+                <h4>
+                    India's tailor-made data collection service
+                </h4>
+                <!--https://creativefirst.film/wp-content/uploads/2022/03/Screenshot-2022-03-18-at-11.52.42-AM.png-->
+                <div><img src="https://t4.ftcdn.net/jpg/03/17/67/17/360_F_317671777_x3V3tOViyPtEAsNFsV4Lmbk5q26HL9Q9.jpg" alt="India" width="100%" height="auto"></div>
+                <hr class="d-sm-none">
+                <br>
+                <br>
+                <br>
+                <h2>Collector Dashboard</h2>
+                <p>View and edit data collector</p>
+            </div>
+            <div class="col-sm-8">
+                <form action="/" method="post">
+                    <h2>Filter</h2>
+                    <br>
+                    
+                    <h5>Location</h5>
+                    <div class="mb-3">
+                        <label for="distance">Within</label>
+                        <input type="number" id="distance" autocomplete="off" class="form-control mx-auto w-auto" min="0" name="distance" placeholder="number">
+                        <label for="place">miles of</label><br>
+                    </div>
 
-<main class="container py-5 text-center">
-    
-   <h1>TODO</h1>
-
-</main>
-
+                    <div class="mb-3">
+                        <input id="place" autocomplete="off" class="form-control mx-auto w-auto" name="address" placeholder="address" type="text">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <br>
+                        <h5>Occupation</h5>
+                        <select class="form-select mx-auto w-auto" name="occupation">
+                            <option disabled="" selected="">Occupation</option>
+                                {% for row in occupation%}
+                                    <option value="{{ row['occupation'] }}">{{ row['occupation'] }}</option>
+                                {% endfor %}         
+                        </select>
+                        
+                        <br>
+                        <h5>Degree</h5>
+                        <select class="form-select mx-auto w-auto" name="degree">
+                            <option disabled="" selected="">Degree</option>
+                                {% for row in degree%}
+                                    <option value="{{ row['degree'] }}">{{ row['degree'] }}</option>
+                                {% endfor %}
+                        </select>
+                        
+                        <br>
+                        <h5>Sector</h5>
+                        <select class="form-select mx-auto w-auto" name="sector">
+                            <option disabled="" selected="">Sector</option>
+                                {% for row in sector%}
+                                    <option value="{{ row['sector'] }}">{{ row['sector'] }}</option>
+                                {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary" type="submit">Match</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

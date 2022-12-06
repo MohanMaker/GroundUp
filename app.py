@@ -2,10 +2,12 @@
 # password = groundup
 
 # todo: add page where collectors can edit their profiles in collector.html
-# rename index to client.html
 # create a main landing page that provides information about the product
 # improve header formatting in map page
 # improve login and register formatting (make 2 column style)
+# make fields not required and remove map in top header
+# make fields in filter on one line
+# forgot password functionality
 
 import os
 import sys
