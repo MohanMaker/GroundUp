@@ -28,6 +28,7 @@ We enable researchers, government, and private companies to obtain high quality,
 - Click the 'Match' button or the 'Map' navbar to view the interactive map. 
 - If you input no parameters in the filter, you should be able to see all data collectors
 <br>
+
 ## Authors:
 👤 **Alex Wong**
 - Github: AlexW1001
