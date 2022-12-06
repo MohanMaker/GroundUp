@@ -7,7 +7,8 @@
 #3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
 # make up more data collectors
 # test filter function - basically it's bypassing if it's not included?
-# remove null values from filter function rn
+# test mobile friendly
+# map navbar
 
 import os
 import sys
@@ -190,19 +191,19 @@ def index():
                 first = 1
                 return first, select
 
-            if occupation != "":
+            if occupation != "None":
                 first, select = fillerchars(first, select)
                 select += " occupation = ?"
             else:
                 first, select = fillerchars(first, select)
                 select += " occupation IS NOT NULL"
-            if degree != "":
+            if degree != "None":
                 first, select = fillerchars(first, select)
                 select += " degree = ?"
             else:
                 first, select = fillerchars(first, select)
                 select += " degree IS NOT NULL"
-            if sector != "":
+            if sector != "None":
                 first, select = fillerchars(first, select)
                 select += " sector = ?"
             else:
@@ -216,11 +217,11 @@ def index():
                 select += " (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?)"
 
             arguments = []
-            if occupation != "":
+            if occupation != "None":
                 arguments.append(occupation)
-            if degree != "":
+            if degree != "None":
                 arguments.append(degree)
-            if sector != "":
+            if sector != "None":
                 arguments.append(sector)
             if not(distance == "" or address == ""):
                 arguments.append(latmin)
@@ -228,16 +229,16 @@ def index():
                 arguments.append(lngmin)
                 arguments.append(lngmax)
             arguments = tuple(arguments)
-
+            
             # Add contents selected by filters into filtered table to graph
             db.execute(select, *arguments)
 
             return redirect("/map")
         else:
             # set up the form to be filled out
-            occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
-            degree = db.execute("SELECT DISTINCT degree FROM datacollectors;")
-            sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
+            occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors WHERE occupation IS NOT NULL;")
+            degree = db.execute("SELECT DISTINCT degree FROM datacollectors WHERE degree IS NOT NULL;")
+            sector = db.execute("SELECT DISTINCT sector FROM datacollectors WHERE sector IS NOT NULL;")
             return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
     elif session.get("type") == 'collector':
@@ -278,13 +279,9 @@ def index():
 @app.route("/map")
 @login_required
 def map_endpoint():
-
-    if db.execute("SELECT COUNT(*) FROM datacollectorsfiltered;")[0]['COUNT(*)'] != 0:
-        # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
-        collector_info = db.execute("SELECT * FROM datacollectorsfiltered WHERE lat IS NOT NULL AND lng is NOT NULL;")
-    else:
-        # If we have not applied filters, show all of the data collectors
-        collector_info = db.execute("SELECT * FROM datacollectors WHERE lat IS NOT NULL AND lng is NOT NULL;")
+    
+    # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
+    collector_info = db.execute("SELECT * FROM datacollectorsfiltered WHERE lat IS NOT NULL AND lng is NOT NULL;")
 
     # find center lat and lng of the points to graph
     count = 0
@@ -294,8 +291,13 @@ def map_endpoint():
         latsum += row["lat"]
         lngsum += row["lng"]
         count += 1
-    avglat = latsum / count
-    avglng = lngsum / count
+    # handle if there are no data collectors
+    if count == 0:
+        avglat = 22.991144554354932
+        avglng = 79.70703619196892
+    else:
+        avglat = latsum / count
+        avglng = lngsum / count
 
     # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
     myMap = folium.Map(location=[avglat, avglng], 
@@ -322,7 +324,7 @@ def map_endpoint():
     myMap.save("templates/map2.html")
 
     # Delete all elements from filtered data collectors table so things map can be generated again in the future.
-    db.execute("DELETE FROM datacollectorsfiltered;")
+    #db.execute("DELETE FROM datacollectorsfiltered;")
 
     return redirect("/full_map")
 
