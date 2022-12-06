@@ -29,7 +29,7 @@ def geocode(address):
         lat = location.latitude
         lng = location.longitude
     except:
-        return False;   
+        return 1;   
 
     return lat, lng
 

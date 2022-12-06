@@ -1,5 +1,7 @@
-# username = groundup
-# password = groundup
+# collector username = groundupcoll
+# collector password = groundupcoll
+# client username = groundupcli
+# client password = groundupcli
 
 
 #1|Krishna|Narayan|21.2744690806881|71.8157917861914|teacher|batchelors|education
@@ -7,7 +9,6 @@
 #3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
 # make up more data collectors
 # test mobile friendly
-# map navbar
 # random number in miles
 
 import os
