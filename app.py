@@ -154,7 +154,7 @@ def index():
             occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors;")
             degree = db.execute("SELECT DISTINCT degree FROM datacollectors;")
             sector = db.execute("SELECT DISTINCT sector FROM datacollectors;")
-            return render_template("index.html", occupation=occupation, degree=degree, sector=sector)
+            return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
     elif session.get("type") == 'collector':
         return render_template("collector.html")
