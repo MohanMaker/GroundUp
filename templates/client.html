@@ -43,7 +43,7 @@
                         <br>
                         <h5>Occupation</h5>
                         <select class="form-select mx-auto w-auto" name="occupation">
-                            <option disabled="" selected="">Occupation</option>
+                            <option disabled="" selected="">occupation</option>
                                 {% for row in occupation%}
                                     <option value="{{ row['occupation'] }}">{{ row['occupation'] }}</option>
                                 {% endfor %}         
@@ -52,7 +52,7 @@
                         <br>
                         <h5>Degree</h5>
                         <select class="form-select mx-auto w-auto" name="degree">
-                            <option disabled="" selected="">Degree</option>
+                            <option disabled="" selected="">degree</option>
                                 {% for row in degree%}
                                     <option value="{{ row['degree'] }}">{{ row['degree'] }}</option>
                                 {% endfor %}
@@ -61,7 +61,7 @@
                         <br>
                         <h5>Sector</h5>
                         <select class="form-select mx-auto w-auto" name="sector">
-                            <option disabled="" selected="">Sector</option>
+                            <option disabled="" selected="">sector</option>
                                 {% for row in sector%}
                                     <option value="{{ row['sector'] }}">{{ row['sector'] }}</option>
                                 {% endfor %}

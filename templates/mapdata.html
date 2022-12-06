@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_ee360dccda64a9563daa912f72c1a2de {
+                #map_c84f98ac2ac7307e52d75e2f18781a2f {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -38,16 +38,16 @@
 <body>
     
     
-            <div class="folium-map" id="map_ee360dccda64a9563daa912f72c1a2de" ></div>
+            <div class="folium-map" id="map_c84f98ac2ac7307e52d75e2f18781a2f" ></div>
         
 </body>
 <script>
     
     
-            var map_ee360dccda64a9563daa912f72c1a2de = L.map(
-                "map_ee360dccda64a9563daa912f72c1a2de",
+            var map_c84f98ac2ac7307e52d75e2f18781a2f = L.map(
+                "map_c84f98ac2ac7307e52d75e2f18781a2f",
                 {
-                    center: [22.991144554354932, 79.70703619196892],
+                    center: [24.231049320935448, 73.202967072313],
                     crs: L.CRS.EPSG3857,
                     zoom: 6,
                     zoomControl: true,
@@ -59,10 +59,52 @@
 
         
     
-            var tile_layer_11a620d72d19544d7eb70624d45ffbaf = L.tileLayer(
+            var tile_layer_b9f8bc3c9fbb648e29cb2cd661bba864 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_ee360dccda64a9563daa912f72c1a2de);
+            ).addTo(map_c84f98ac2ac7307e52d75e2f18781a2f);
         
+    
+            var marker_0e29e7a9ca24fd323bd4c39f58134663 = L.marker(
+                [21.2744690806881, 71.8157917861914],
+                {}
+            ).addTo(map_c84f98ac2ac7307e52d75e2f18781a2f);
+        
+    
+        var popup_e6fc7fac069fc857d929efce607c55df = L.popup({"maxWidth": 500});
+
+        
+            
+                var html_b19a4b448cac4511a246e1486fc01fb5 = $(`<div id="html_b19a4b448cac4511a246e1486fc01fb5" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Krishna Narayan</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <tr>         <td class="tg-0pky">Occupation: teacher</td>     </tr>     <tr>         <td class="tg-0pky">Degree: bachelors</td>     </tr>     <tr>         <td class="tg-0pky">Sector: education</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
+                popup_e6fc7fac069fc857d929efce607c55df.setContent(html_b19a4b448cac4511a246e1486fc01fb5);
+            
+        
+
+        marker_0e29e7a9ca24fd323bd4c39f58134663.bindPopup(popup_e6fc7fac069fc857d929efce607c55df)
+        ;
+
+        
+    
+    
+            var marker_f6507d6a6bcb3d31cec48c468652b62c = L.marker(
+                [27.1876295611828, 74.5901423584346],
+                {}
+            ).addTo(map_c84f98ac2ac7307e52d75e2f18781a2f);
+        
+    
+        var popup_8b900bc7e2b625e170f1042abef7df57 = L.popup({"maxWidth": 500});
+
+        
+            
+                var html_5b08107dbbe112acbf08eea50cfca25b = $(`<div id="html_5b08107dbbe112acbf08eea50cfca25b" style="width: 100.0%; height: 100.0%;"><!DOCTYPE html>     <html>     <head>     <h4 style="margin-bottom:10"; width="200px">Nitesh Verma</h4>     </head>         <table style="height: 126px; width: 350px;">     <tbody>     <tr>         <td class="tg-0pky">Occupation: village level entrepreneur</td>     </tr>     <tr>         <td class="tg-0pky">Degree: bachelors</td>     </tr>     <tr>         <td class="tg-0pky">Sector: education</td>     </tr>      </tbody>     </table>     </html>     </div>`)[0];
+                popup_8b900bc7e2b625e170f1042abef7df57.setContent(html_5b08107dbbe112acbf08eea50cfca25b);
+            
+        
+
+        marker_f6507d6a6bcb3d31cec48c468652b62c.bindPopup(popup_8b900bc7e2b625e170f1042abef7df57)
+        ;
+
+        
+    
 </script>
 </html>

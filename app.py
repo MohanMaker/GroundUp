@@ -1,10 +1,11 @@
-# collector username = groundupcoll
-# collector password = groundupcoll
 # client username = groundupcli
 # client password = groundupcli
 
+# collector1 username = coll1
+# collector1 password = coll1
 
-#1|Krishna|Narayan|21.2744690806881|71.8157917861914|teacher|batchelors|education
+
+#1|Krishna|Narayan|21.2744690806881|71.8157917861914|teacher|bachelors|education
 #2|Nitesh|Verma|27.1876295611828|74.5901423584346|village level entrepreneur|batchelors|education
 #3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
 # make up more data collectors
