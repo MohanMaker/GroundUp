@@ -10,10 +10,37 @@
 margin: 5px 10px 5px 0;
 }
 
-.tg1 {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
+/* Make register mobile friendly */
+@media only screen and (max-width: 768px) {
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, .tg1, .tg-0laxhalf, th, td, tr { 
+		display: block; 
+	}
+
+    .tg1 {
+        width: 0;
+    }
+
+	td { 
+		/* Behave  like a "row" */
+		position: relative;
+	}
+
+    .tg-0laxhalf {
+        white-space: nowrap;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+	/* Normal margins and width for register in desktop */
+
+    .tg1 {
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+    }
+
 }
 
 .tg-0laxhalf {
