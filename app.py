@@ -88,6 +88,29 @@ def login():
         return render_template("login.html")
 
 
+@app.route("/forgot", methods=["GET", "POST"])
+def forgot():
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        # Get username and password from user
+        username = request.form.get("username")
+        new_password = request.form.get("password")
+
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+            
+        # Ensure username exists
+        if len(rows) != 1:
+            return apology("invalid username", 403)
+
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(new_password), username)
+
+        return redirect("/")
+        
+    else:
+        return render_template("login.html")
+
+
+
 @app.route("/logout")
 def logout():
     """Log user out"""
