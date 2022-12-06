@@ -1,17 +1,3 @@
-# client username = groundupcli
-# client password = groundupcli
-
-# collector1 username = coll1
-# collector1 password = coll1
-
-
-#1|Krishna|Narayan|21.2744690806881|71.8157917861914|teacher|bachelors|education
-#2|Nitesh|Verma|27.1876295611828|74.5901423584346|village level entrepreneur|batchelors|education
-#3|Lakshmi|Siyaram|23.5117269163602|73.5117268030371|anganwadi worker|secondary|health
-# make up more data collectors
-# test mobile friendly
-# random number in miles
-
 import os
 import sys
 from tempfile import mkdtemp
@@ -254,8 +240,6 @@ def index():
             elif request.form['updatebtn'] == 'location':
                 lat = request.form.get("latitude")
                 lng = request.form.get("longitude")
-                print(lat, file=sys.stderr)
-                print(lng, file=sys.stderr)
 
                 #check that lat and lng are valid
                 if reversegeocode(lat, lng) == 1:

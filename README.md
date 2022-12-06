@@ -19,6 +19,19 @@ We enable researchers, government, and private companies to obtain high quality,
 
 
 ## Using Groundup:
+#### Sample Logins:
+- client username = groundupcli
+- client password = groundupcli
+
+- collector1 username = coll1
+- collector1 password = coll1
+- collector2 username = coll2
+- collector2 password = coll2
+- collector3 username = coll3
+- collector3 password = coll3
+
+Use these logins (which already have associated data) or register new users.
+
 #### Data Collectors:
 - Enter your information in your dashboard. This allows clients to see your information on the interactive map. 
 
