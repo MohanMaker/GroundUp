@@ -1,13 +1,11 @@
 # username = groundup
 # password = groundup
 
-# todo: add page where collectors can edit their profiles in collector.html
-# create a main landing page that provides information about the product
+# fix formattting of collector.html
 # improve header formatting in map page
-# improve login and register formatting (make 2 column style)
-# make fields not required and enable filtering of only certain felildsremove map in top header
-# make fields in filter on one line
+# make fields not required and enable filtering of only certain felilds. remove map in top header
 # forgot password functionality
+# register as a data collector - input all the params and associate with login
 
 import os
 import sys
@@ -109,11 +107,11 @@ def register():
 
         # Validate username
         if username == '' or len(db.execute("SELECT * FROM users WHERE username = ?", username)) != 0:
-            return apology("Enter a valid username", 400)
+            return apology("enter a valid username", 400)
 
         # Validate password
         if password == '' or confirmation == '' or password != confirmation:
-            return apology("Enter a valid password", 400)
+            return apology("enter a valid password", 400)
 
         db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), type)
 
@@ -139,7 +137,7 @@ def index():
             sector = str(request.form.get("sector"))
 
             if geocode(address) == 1:
-                apology("Unrecognized location", 403) 
+                return apology("unrecognized location", 403) 
             lat, lng = geocode(address)
             radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
             latmin = lat - radius
@@ -159,10 +157,31 @@ def index():
             return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
     elif session.get("type") == 'collector':
+        collectorid = 1;
         if request.method == "POST":
-            return todo
+            if request.form['updatebtn'] == 'location':
+                lat = request.form.get("latitude")
+                lng = request.form.get("longitude")
+                print(lat, file=sys.stderr)
+                print(lng, file=sys.stderr)
+
+                #check that lat and lng are valid
+                if reversegeocode(lat, lng) == 1:
+                    return apology("enter a valid lat and lng", 403)
+
+                db.execute("UPDATE datacollectors SET lat = ?, lng = ? WHERE id = ?;", lat, lng, collectorid)
+            elif request.form['updatebtn'] == 'occupation':
+                occupation = str(request.form.get("occupation"))
+                db.execute("UPDATE datacollectors SET occupation = ? WHERE id = ?;", occupation, collectorid)
+            elif request.form['updatebtn'] == 'degree':
+                degree = str(request.form.get("degree"))
+                db.execute("UPDATE datacollectors SET degree = ? WHERE id = ?;", degree, collectorid)
+            elif request.form['updatebtn'] == 'sector':
+                sector = str(request.form.get("sector"))
+                db.execute("UPDATE datacollectors SET sector = ? WHERE id = ?;", sector, collectorid)
+            return redirect("/")
         else:
-            profile = db.execute("SELECT * FROM datacollectors WHERE id = 1;")
+            profile = db.execute("SELECT * FROM datacollectors WHERE id = ?;", collectorid)
             address = reversegeocode(profile[0]["lat"], profile[0]["lng"])
             return render_template("collector.html", profile=profile, address=address)
 

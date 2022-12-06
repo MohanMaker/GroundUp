@@ -9,17 +9,18 @@ from functools import wraps
 
 def reversegeocode(lat, lng):
     lat, lng = str(lat), str(lng)
-    location = geolocator.reverse(lat+","+lng)
- 
-    address = location.raw['address']
-    
-    # traverse the data
-    output = {}
-    output['city'] = address.get('city', '')
-    output['state'] = address.get('state', '')
-    output['country'] = address.get('country', '')
-    output['zipcode'] = address.get('postcode')
-
+    try:
+        location = geolocator.reverse(lat+","+lng)
+        address = location.raw['address']
+        
+        # traverse the data
+        output = {}
+        output['city'] = address.get('city', '')
+        output['state'] = address.get('state', '')
+        output['country'] = address.get('country', '')
+        output['zipcode'] = address.get('postcode')
+    except:
+        return 1;
     return output
 
 def geocode(address):
@@ -28,7 +29,7 @@ def geocode(address):
         lat = location.latitude
         lng = location.longitude
     except:
-        return 1;   
+        return False;   
 
     return lat, lng
 

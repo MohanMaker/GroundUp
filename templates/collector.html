@@ -25,44 +25,44 @@
             </div>
             <div class="col-sm-8">
                 <h2>Current Profile</h2>
-                <p>Name: {{ profile[0]["firstname"] }} {{ profile[0]["lastname"] }} </p>
-                <p>Location: {{ address["city"] }} {{ address["state"] }}, {{ address["country"] }} ({{ profile[0]["lat"] }}, {{ profile[0]["lng"] }})</p>
-                <p>Occupation: {{ profile[0]["occupation"] }}</p>
-                <p>Degree: {{ profile[0]["degree"] }}</p>
-                <p>Sector: {{ profile[0]["sector"] }}</p>
+                <br>
+                <p><strong>Name:</strong> {{ profile[0]["firstname"] }} {{ profile[0]["lastname"] }} </p>
+                <p><strong>Location:</strong> {{ address["city"] }} {{ address["state"] }}, {{ address["country"] }} ({{ profile[0]["lat"] | round(3) }}, {{ profile[0]["lng"] | round(3)}})</p>
+                <p><strong>Occupation:</strong> {{ profile[0]["occupation"] }}</p>
+                <p><strong>Degree:</strong> {{ profile[0]["degree"] }}</p>
+                <p><strong>Sector:</strong> {{ profile[0]["sector"] }}</p>
 
                 <form action="/" method="post">
+                    <br><br>
                     <h2>Edit Profile</h2>
                     <br>
                     
-                    <h5>Location</h5>
+                    <h5>New Location</h5>
                     <div class="mb-3">
-                        <input id="location" autocomplete="off" class="form-control mx-auto w-auto" name="address" placeholder="address" type="text">
+                        <input id="latitude" autocomplete="off" class="form-control mx-auto w-auto" name="latitude" placeholder="latitude" type="number" step="any">
                     </div>
+                    <div class="mb-3">
+                        <input id="longitude" autocomplete="off" class="form-control mx-auto w-auto" name="longitude" placeholder="longitude" type="number" step="any">
+                    </div>
+                    <button class="btn btn-primary" type="submit" name="updatebtn" value="location">Update</button>
 
-                    <br>
-
-                    <h5>Occupation</h5>
+                    <h5>New Occupation</h5>
                     <div class="mb-3">
                         <input id="occupation" autocomplete="off" class="form-control mx-auto w-auto" name="occupation" placeholder="occupation" type="text">
                     </div>
+                    <button class="btn btn-primary" type="submit" name="updatebtn" value="occupation">Update</button>
                     
-                    <br>
-                    
-                    <h5>Degree</h5>
+                    <h5>New Degree</h5>
                     <div class="mb-3">
                         <input id="degree" autocomplete="off" class="form-control mx-auto w-auto" name="degree" placeholder="degree" type="text">
-                    </div>
-                        
-                    <br>
-                    
-                    <h5>Sector</h5>
+                    </div>  
+                    <button class="btn btn-primary" type="submit" name="updatebtn" value="degree">Update</button>
+
+                    <h5>New Sector</h5>
                     <div class="mb-3">
                         <input id="sector" autocomplete="off" class="form-control mx-auto w-auto" name="sector" placeholder="sector" type="text">
                     </div>  
-
-                    <br>
-                    <button class="btn btn-primary" type="submit">Match</button>
+                    <button class="btn btn-primary" type="submit" name="updatebtn" value="sector">Update</button>
                 </form>
             </div>
         </div>
