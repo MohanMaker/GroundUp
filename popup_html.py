@@ -15,12 +15,9 @@ def popup_html(item):
     </head>
         <table style="height: 126px; width: 350px;">
     <tbody>
-    <thead>
     <tr>
-        <th class="tg-0pky">Occupation: """+ occupation +"""</th>
+        <td class="tg-0pky">Occupation: """+ occupation +"""</td>
     </tr>
-    </thead>
-    <tbody>
     <tr>
         <td class="tg-0pky">Degree: """+ degree +"""</td>
     </tr>
