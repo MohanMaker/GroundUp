@@ -15,4 +15,36 @@
         </div>
         <button class="btn btn-primary" type="submit">Log In</button>
     </form>
+    <br>
+    <br>
+    <!--Forgot Password button: click it and it opens a new form that lets you change your password-->
+
+    <button class="open-button btn-warning" type="forgot" onclick="openForm()">Forgot Password?</button>
+
+    <div class="form-popup" id="myForm">
+      <form action="/action_page.php" class="form-container">
+        <h1>New Login</h1>
+    
+        <label for="email"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="email" required>
+    
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter New Password" name="psw" required>
+    
+        <button type="submit" class="btn">Login</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+      </form>
+    </div>
+    
+    <script>
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+    
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
+    </script>
+    
+  
 {% endblock %}
