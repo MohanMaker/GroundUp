@@ -20,6 +20,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///groundup.db")
 
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -27,6 +28,7 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -59,7 +61,7 @@ def login():
         # Remember what type of user is logged in (collector or client)
         session["type"] = rows[0]["type"]
 
-        # create a new empty data collector linked to the user (if the user is a data collector)
+        # Create a new empty data collector linked to the user (if the user is a data collector and this is the first time logging in)
         if session["type"] == 'collector':
             if db.execute("SELECT COUNT(*) FROM datacollectors WHERE userid = ?;", session["user_id"])[0]["COUNT(*)"] == 0:
                 db.execute("INSERT INTO datacollectors (userid) VALUES (?);", session["user_id"])
@@ -68,28 +70,6 @@ def login():
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html")
-
-
-@app.route("/forgot", methods=["GET", "POST"])
-def forgot():
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        # Get username and password from user
-        username = request.form.get("username")
-        new_password = request.form.get("password")
-
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-            
-        # Ensure username exists
-        if len(rows) != 1:
-            return apology("invalid username", 403)
-
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(new_password), username)
-
-        return redirect("/")
-        
     else:
         return render_template("login.html")
 
@@ -105,9 +85,38 @@ def logout():
     return redirect("/")
 
 
+@app.route("/forgot", methods=["GET", "POST"])
+def forgot():
+    """Reset forgotten password"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Get username and new password from user
+        username = request.form.get("username")
+        new_password = request.form.get("password")
+
+        # Ensure username exists
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if len(rows) != 1:
+            return apology("invalid username", 403)
+
+        # Update password hash in the database
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(new_password), username)
+
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """Register a new data collector or client"""
+
     if request.method == "POST":
+
         # Get username and password from user
         username = request.form.get("username")
         password = request.form.get("password")
@@ -121,40 +130,46 @@ def register():
         if password == '' or confirmation == '' or password != confirmation:
             return apology("enter a valid password", 400)
 
+        # Find user type based on which form was submitted
         if request.form['submit'] == 'collector':
             type = 'collector';
         else:
             type = 'client'
 
+        # Create a new user in users database
         db.execute("INSERT INTO users (username, hash, type) VALUES(?, ?, ?);", username, generate_password_hash(password), type)
-
-        flash("Registered!")
 
         return redirect("/")
 
     else:
         return render_template("register.html")
 
+
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    """Render index pages: data collector dashboard and client dashboard"""
+
+    # If logged in as a client
     if session.get("type") == 'client':
         if request.method == "POST":
-            # submit results of form to database
 
-            # Get inputs from user
+            # Get form inputs from user
             distance = request.form.get("distance")
             address = request.form.get("address")
             occupation = str(request.form.get("occupation"))
             degree = str(request.form.get("degree"))
             sector = str(request.form.get("sector"))
 
+            # Handle exceptions with address and distance
             if distance == "" or address == "":
                 pass
             elif geocode(address) == 1:
                 return apology("unrecognized location", 403) 
             else:
+                # Geocode address to lat and lng
                 lat, lng = geocode(address)
+                # Find range of lat and lng based on the distance
                 radius = geopy.units.degrees(arcminutes=geopy.units.nautical(miles=int(distance)))
                 latmin = lat - radius
                 latmax = lat + radius
@@ -162,9 +177,10 @@ def index():
                 lngmax = lng + radius
 
             # Append to datacollectors filtered based on the inputs from the user, handling blank inputs
+            # If an input is blank, any value for that condition should be seached for and displayed
             select = "INSERT INTO datacollectorsfiltered SELECT id, firstname, lastname, lat, lng, occupation, degree, sector FROM datacollectors"
             first = 0
-
+            
             def fillerchars(first, select):
                 if first == 0:
                     select += " WHERE"
@@ -173,6 +189,7 @@ def index():
                 first = 1
                 return first, select
 
+            # Dynamically create SQL query text
             if occupation != "None":
                 first, select = fillerchars(first, select)
                 select += " occupation = ?"
@@ -198,6 +215,7 @@ def index():
                 first, select = fillerchars(first, select)
                 select += " (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?)"
 
+            # Dynamically generate arguments for the sql query
             arguments = []
             if occupation != "None":
                 arguments.append(occupation)
@@ -212,30 +230,34 @@ def index():
                 arguments.append(lngmax)
             arguments = tuple(arguments)
             
-            # Add contents selected by filters into filtered table to graph
+            # Execute SQL query to add contents selected by filters to filtered data collectors table
             db.execute(select, *arguments)
 
             return redirect("/map")
+
         else:
-            # set up the form to be filled out
+            # Render the filtering form, adding values from database
             occupation = db.execute("SELECT DISTINCT occupation FROM datacollectors WHERE occupation IS NOT NULL;")
             degree = db.execute("SELECT DISTINCT degree FROM datacollectors WHERE degree IS NOT NULL;")
             sector = db.execute("SELECT DISTINCT sector FROM datacollectors WHERE sector IS NOT NULL;")
-            return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
 
+            return render_template("client.html", occupation=occupation, degree=degree, sector=sector)
+    
+    # If logged in as a datacollector
     elif session.get("type") == 'collector':
         userid = session["user_id"]
         if request.method == "POST":
+            
+            # Update collector database based on which value is updated/which button is pressed
             if request.form['updatebtn'] == 'name':
                 firstname = str(request.form.get("firstname"))
                 lastname = str(request.form.get("lastname"))
                 db.execute("UPDATE datacollectors SET firstname = ?, lastname = ? WHERE userid = ?;", firstname, lastname, userid)
-
             elif request.form['updatebtn'] == 'location':
                 lat = request.form.get("latitude")
                 lng = request.form.get("longitude")
 
-                #check that lat and lng are valid
+                # Check that lat and lng are valid
                 if reversegeocode(lat, lng) == 1:
                     return apology("enter a valid lat and lng", 403)
 
@@ -251,19 +273,22 @@ def index():
                 db.execute("UPDATE datacollectors SET sector = ? WHERE userid = ?;", sector, userid)
             return redirect("/")
         else:
+            # Render the data collector dashboard and editing form, drawing values from the database
             profile = db.execute("SELECT * FROM datacollectors WHERE userid = ?;", userid)
             address = reversegeocode(profile[0]["lat"], profile[0]["lng"])
             username = db.execute("SELECT username FROM users WHERE id = ?", userid)[0]["username"]
             return render_template("collector.html", profile=profile, address=address, username=username)
 
+
 @app.route("/map")
 @login_required
 def map_endpoint():
-    
+    """Generate mapdata.html and render map based on user parameters"""
+
     # Retrieve the appropriate data collectors based on our filters. This outputs in the form of a list of dictionaries. 
     collector_info = db.execute("SELECT * FROM datacollectorsfiltered WHERE lat IS NOT NULL AND lng is NOT NULL;")
 
-    # find center lat and lng of the points to graph
+    # Find center lat and lng of the points we are graphing
     count = 0
     latsum = 0
     lngsum = 0
@@ -271,7 +296,7 @@ def map_endpoint():
         latsum += row["lat"]
         lngsum += row["lng"]
         count += 1
-    # handle if there are no data collectors
+    # Handle if there are no data collectors
     if count == 0:
         avglat = 22.991144554354932
         avglng = 79.70703619196892
@@ -279,20 +304,19 @@ def map_endpoint():
         avglat = latsum / count
         avglng = lngsum / count
 
-    # initialize folium map. Sets initial location to India. Also uses leaflet and OpenStreetMaps. 
+    # Initialize folium map centering on dynamic location (above)
     myMap = folium.Map(location=[avglat, avglng], 
             width='100%',
             height='100%',
             zoom_start=6,
             position='relative')    
         
-    # Create a for loop that iterates through our list of dictionaries. Retrieves values from the x and y coordinate respectively.
-    # Then, inputs the x and y coordinates into the map using the folium.Marker functionality.
+    # Add markers to the map using the folium.Marker functionality, iterating over our collector info from datacollectorsfiltered
     for item in collector_info:
         x = item["lat"]
         y = item["lng"]
 
-        # uses the popup_html helper function to create the "profiles" when you click on the marker
+        # Uses the popup_html helper function to create the "profiles" when you click on the marker
         html = popup_html(item)
         popup = folium.Popup(folium.Html(html, script=True), max_width=500)
 
@@ -302,7 +326,7 @@ def map_endpoint():
     # Saves the changes on the html page. 
     myMap.save("templates/mapdata.html")
 
-    # Delete all elements from filtered data collectors table so things map can be generated again in the future.
+    # Delete all elements from filtered data collectors table so map can be generated again in the future
     db.execute("DELETE FROM datacollectorsfiltered;")
 
     return render_template("map.html")

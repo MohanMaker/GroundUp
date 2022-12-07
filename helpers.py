@@ -4,6 +4,8 @@ geolocator = Nominatim(user_agent="geoapiExercises")
 from flask import redirect, render_template, session
 from functools import wraps
 
+
+# Converts lat and lng into address string, returns 1 if failed
 def reversegeocode(lat, lng):
     lat, lng = str(lat), str(lng)
     try:
@@ -20,6 +22,8 @@ def reversegeocode(lat, lng):
         return 1;
     return output
 
+
+# Converts adderss string into lat and lng coordinates, returns 1 if failed
 def geocode(address):
     try:
         location = geolocator.geocode(address)
@@ -29,6 +33,7 @@ def geocode(address):
         return 1;   
 
     return lat, lng
+
 
 def apology(message, code=400):
     """Render message as an apology to user."""
