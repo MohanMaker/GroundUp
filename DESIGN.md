@@ -6,7 +6,7 @@ One of the core features of our project was an interactive map displaying data c
 
 One issue we faced was with map layout and design. It was difficult to display the map on an html page that included a bootstrap navbar. In Folium, every time the map is rendered, it overwrites 'mapdata.html' with the new map. To solve this, extend 'mapdata.html', in the bottom of another file called 'map.html' that head the header code. 
 
-## App.py
+## App.py:
 ### Index
 The heart of 'app.py' is the index function. The function has two parts, one for when the logged in user is a client, and one for when the user is a data collector. The type of user currently logged in is stored with flask session.
 
@@ -14,13 +14,13 @@ If the current user is a client (data seeker), then app.py renders the client ho
 
 If the current user is a data collector, then app.py renders the collector dashboard (collector.html). This shows the current data collector, including their username, location, occupation, degree, and sector. Collector.html also has a series of form inputs which can be used to edit the specific characteristics of the data collector in the database. When this form is submitted via POST, 'app,py' updates the collector in the database, and re-renders template with the new values.
 
-### Register, Login, Forgot Password 
+### Register, Login, Forgot Password
 App.py handles logging in, registering, and changing the password with three different methods. The register function detects whether the user registers with the data collector registration form or the client registration form and updates the database with the username, password hash, and user type accordingly. Login then detects which type of user the login credentials correspond to, and if the user is a new data collector, it creates a blank datacollector that has a foreign key linked to the login username. The user can then update the name, location, etc. of the data collector in the data collector profile. 
 
 Forgot password allows a user to reset their password if they know their username. The html elements are all in login.html, however, the forgot password button opens up in a popup form. The inputs of this form (username and password) ‘POST’ to /forgot, a separate function in 'app.py'.. If the inputted username matches an existing username, a SQL query overwrites the existing password with the newly inputted password using UPDATE. Once that’s done, the user can log in as they normally would with the new password. 
 
-## Helpers.py
+## Helpers.py:
 Helpers.py contains a few functions which assist the functions in app.py. Namely it uses the Nominatim geocoder from GeoPy to translate latitude and longitude coordinates into addresses and vice-versa. This is used for inputting and displaying locations on the dashboards and the map. We initially tried to use an API to do this, but many APIs limit the number of queries, so we ended up using a Python library with the same functionality. 
 
-## HTML, CSS, Mobile-Friendly
+## HTML, CSS, Mobile-Friendly:
 Another design decision involved the register, login, and dashboard pages. These pages use tables to format the information on the website into two columns. However, on mobile, the right side columns were being placed outside of the page. We updated the CSS to automatically reformat the table to fit into one column when the page reaches a certain size. 
