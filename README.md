@@ -3,6 +3,8 @@ Welcome to Groundup, a decentralized data collection platform that connects data
 
 We enable researchers, government, and private companies to obtain high quality, local, timely data from villages in rural India.
 
+![alt text](/static/About.png)
+
 ## Getting Started:
 - Ensure you are in the Groundup folder
 - Check if pip is installed with `pip --version` 
