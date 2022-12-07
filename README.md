@@ -1,7 +1,7 @@
 # Groundup
-Welcome to Groundup, a decentralized data marketplace that connects data collectors to data seekers. 
+Welcome to Groundup, a decentralized data collection platform that connects data collectors to data seekers. 
 
-We enable researchers, government, and private companies to obtain high quality, hyperlocal, timely data from villages in rural India.
+We enable researchers, government, and private companies to obtain high quality, local, timely data from villages in rural India.
 
 ## Getting Started:
 - Ensure you are in the Groundup folder
