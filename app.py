@@ -61,8 +61,8 @@ def login():
 
         # create a new empty data collector linked to the user (if the user is a data collector)
         if session["type"] == 'collector':
-            userid = session["user_id"]
-            db.execute("INSERT INTO datacollectors (userid) VALUES (?);", userid)
+            if db.execute("SELECT COUNT(*) FROM datacollectors WHERE userid = ?;", session["user_id"])[0]["COUNT(*)"] == 0:
+                db.execute("INSERT INTO datacollectors (userid) VALUES (?);", session["user_id"])
 
         # Redirect user to home page
         return redirect("/")
@@ -92,7 +92,6 @@ def forgot():
         
     else:
         return render_template("login.html")
-
 
 
 @app.route("/logout")
