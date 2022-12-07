@@ -5,6 +5,9 @@ We enable researchers, government, and private companies to obtain high quality,
 
 ![alt text](/static/About.png)
 
+## Video Overview
+[Groundup: CS50 Final Project Demo](https://youtu.be/rZiRzh7lkxU)
+
 ## Getting Started:
 - Ensure you are in the Groundup folder
 - Check if pip is installed with `pip --version` 
