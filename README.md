@@ -5,7 +5,7 @@ We enable researchers, government, and private companies to obtain high quality,
 
 ![alt text](/static/About.png)
 
-## Video Overview
+## Video Overview:
 [Groundup: CS50 Final Project Demo](https://youtu.be/rZiRzh7lkxU)
 
 ## Getting Started:
