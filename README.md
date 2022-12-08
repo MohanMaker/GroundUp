@@ -1,7 +1,7 @@
 # Groundup
 Welcome to Groundup, a decentralized data collection platform that connects data collectors to data seekers. 
 
-We enable researchers, government, and private companies to obtain high quality, local, timely data from villages in rural India.
+We enable researchers, government, and private companies to obtain high-quality, local, timely data from villages in rural India.
 
 ![alt text](/static/About.png)
 
@@ -25,7 +25,7 @@ We enable researchers, government, and private companies to obtain high quality,
 ## Using Groundup:
 - Navigate to register in the navbar to register as a data collector or client
 - Login to the data collector or client dashboards
-    - You can log in with the credentials you registerd with, or with these existing credentials which already have associated data:
+    - You can log in with the credentials you registered with, or with these existing credentials which already have associated data:
     - Client:
         - Username: "groundupcli"
         - Password: "groundupcli"
@@ -43,3 +43,6 @@ We enable researchers, government, and private companies to obtain high quality,
 **Alex Wong**: [AlexW1001](https://github.com/AlexW1001) and **Mohan Hathi**: [MohanMaker](https://github.com/MohanMaker)
 
 This was created as a final project for Harvard's Fall 2022 session of [CS50](https://cs50.harvard.edu/college/2022/fall/).
+
+## To Do:
+- Make map borders politically correct
