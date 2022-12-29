@@ -67,7 +67,7 @@ def login():
                 db.execute("INSERT INTO datacollectors (userid) VALUES (?);", session["user_id"])
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/dashboard")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -144,11 +144,14 @@ def register():
     else:
         return render_template("register.html")
 
-
-@app.route("/", methods=["GET", "POST"])
-@login_required
+@app.route("/")
 def index():
-    """Render index pages: data collector dashboard and client dashboard"""
+    return render_template("index.html")
+
+@app.route("/dashboard", methods=["GET", "POST"])
+@login_required
+def dashboards():
+    """Render main dashboard pages: data collector dashboard and client dashboard"""
 
     # If logged in as a client
     if session.get("type") == 'client':
@@ -271,7 +274,7 @@ def index():
             elif request.form['updatebtn'] == 'sector':
                 sector = str(request.form.get("sector"))
                 db.execute("UPDATE datacollectors SET sector = ? WHERE userid = ?;", sector, userid)
-            return redirect("/")
+            return redirect("/dashboard")
         else:
             # Render the data collector dashboard and editing form, drawing values from the database
             profile = db.execute("SELECT * FROM datacollectors WHERE userid = ?;", userid)

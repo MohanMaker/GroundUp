@@ -7,8 +7,8 @@ One of the core features of our project was an interactive map displaying data c
 One issue we faced was with map layout and design. It was difficult to display the map on an html page that included a bootstrap navbar. In Folium, every time the map is rendered, it overwrites 'mapdata.html' with the new map. To solve this, extend 'mapdata.html', in the bottom of another file called 'map.html' that head the header code. 
 
 ## App.py:
-### Index
-The heart of 'app.py' is the index function. The function has two parts, one for when the logged in user is a client, and one for when the user is a data collector. The type of user currently logged in is stored with flask session.
+### Dashboards
+The heart of 'app.py' is the dashboards function. The function has two parts, one for when the logged in user is a client, and one for when the user is a data collector. The type of user currently logged in is stored with flask session.
 
 If the current user is a client (data seeker), then app.py renders the client homepage (client.html) and populates the dropdown menus in client.html with all of the unique occupations, educations, and sectors of the data collectors currently in the database. This allows the client to filter for data collectors based on location, occupation, education, and sector using dropdowns and text/number input boxes. When the client submits the filter form, the data is sent to 'app.py' through post. The function then needs searches for the data collectors that fit into the filter parameters inputted. This is tricky, because if the client only filtered certain categories, only these categories should be included in the search. Or, if the client just clicks “filter” while leaving all the filters blank, then all of the data collectors should be rendered (no filters applied). To accomplish this complex request, we dynamically generate a SQL search query based on the filters which the user has selected. 
 
