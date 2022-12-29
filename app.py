@@ -5,8 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flask_session import Session
-from helpers import geocode, reversegeocode, login_required, apology
-from popup_html import popup_html
+from helpers import geocode, reversegeocode, login_required, apology, popup_html
 
 # Configure application
 app = Flask(__name__)
