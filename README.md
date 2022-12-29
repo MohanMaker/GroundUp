@@ -43,6 +43,3 @@ We enable researchers, government, and private companies to obtain high-quality,
 **Alex Wong**: [AlexW1001](https://github.com/AlexW1001) and **Mohan Hathi**: [MohanMaker](https://github.com/MohanMaker)
 
 This was created as a final project for Harvard's Fall 2022 session of [CS50](https://cs50.harvard.edu/college/2022/fall/).
-
-## To Do:
-- Make map borders politically correct
