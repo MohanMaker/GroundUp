@@ -62,9 +62,8 @@ def login():
 
         # Create a new empty data collector linked to the user (if the user is a data collector and this is the first time logging in)
         if session["type"] == 'collector':
-            if db.execute("SELECT COUNT(*) FROM datacollectors WHERE userid = ?;", session["user_id"])[0]["COUNT(*)"] == 0:
-                db.execute("INSERT INTO datacollectors (userid) VALUES (?);", session["user_id"])
-
+            db.execute("INSERT INTO datacollectors (userid) SELECT ? WHERE NOT EXISTS (SELECT * FROM datacollectors WHERE userid = ?);", session["user_id"], session["user_id"])
+            
         # Redirect user to home page
         return redirect("/dashboard")
 
