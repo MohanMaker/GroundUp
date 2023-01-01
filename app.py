@@ -1,3 +1,5 @@
+import os
+import sys
 import folium
 import geopy
 from cs50 import SQL
@@ -62,8 +64,9 @@ def login():
 
         # Create a new empty data collector linked to the user (if the user is a data collector and this is the first time logging in)
         if session["type"] == 'collector':
-            db.execute("INSERT INTO datacollectors (userid) SELECT ? WHERE NOT EXISTS (SELECT * FROM datacollectors WHERE userid = ?);", session["user_id"], session["user_id"])
-            
+            if not db.execute("SELECT 1 FROM datacollectors WHERE userid = ?;", session["user_id"]):
+                db.execute("INSERT INTO datacollectors (userid) VALUES (?);", session["user_id"])
+
         # Redirect user to home page
         return redirect("/dashboard")
 
