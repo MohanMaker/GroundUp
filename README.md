@@ -9,22 +9,22 @@ We enable researchers, government, and private companies to obtain high-quality,
 [GroundUp: CS50 Final Project Demo](https://youtu.be/rZiRzh7lkxU)
 
 ## Getting Started:
-- Download the GroundUp repository folder to your computer
-- Use `cd` in terminal to make the GroundUp folder your current working directory
-- Create a Python virtual environment with `python3 -m venv venv`
-- Execute `. venv/bin/activate` to activate the environment
-- Ensure that pip is installed by running `pip3 --version`, if not, install pip [these instructions](https://pip.pypa.io/en/stable/installation/)
+- Download the GroundUp repository folder to your computer.
+- Use `cd` in terminal to make the GroundUp folder your current working directory.
+- Create a Python virtual environment with `python3 -m venv venv`.
+- Execute `. venv/bin/activate` to activate the environment.
+- Ensure that pip is installed by running `pip3 --version`, if not, install pip [these instructions](https://pip.pypa.io/en/stable/installation/).
 - Install Flask and other required dependencies with `pip3 install [dependency name]`. 
-    - For example: `pip install Flask`
-    - See requirements.txt for a list of all the dependencies that need to be installed
-- Run `flask run` to start the website
-- Check the terminal for an output like: "Running on http://127.0.0.1:5000"
-- Navigate to this link in your browser
-- GroundUp is now running locally
+    - For example: `pip install Flask`.
+    - See requirements.txt for a list of all the dependencies that need to be installed.
+- Run `flask run` to start the website.
+- Check the terminal for an output like: "Running on http://127.0.0.1:5000".
+- Navigate to this link in your browser.
+- GroundUp is now running locally.
 
 ## Using GroundUp:
-- Navigate to register in the navbar to register as a data collector or client
-- Login to the data collector or client dashboards
+- Navigate to register in the navbar to register as a data collector or client.
+- Login to the data collector or client dashboards.
     - You can log in with the credentials you registered with, or with these existing credentials which already have associated data:
     - Client:
         - Username: "groundupcli"
